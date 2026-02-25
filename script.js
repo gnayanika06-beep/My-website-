@@ -93,3 +93,28 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProducts();
     renderCart();
 });
+const products = [
+    // 👕 Men Clothing
+    { id: 1, name: "Men T-Shirt", price: 399, image: "https://via.placeholder.com/300", category: "men" },
+    { id: 2, name: "Men Jeans", price: 899, image: "https://via.placeholder.com/300", category: "men" },
+
+    // 👗 Women Clothing
+    { id: 3, name: "Women Kurti", price: 599, image: "https://via.placeholder.com/300", category: "women" },
+    { id: 4, name: "Women Top", price: 499, image: "https://via.placeholder.com/300", category: "women" },
+
+    // 🍚 Food
+    { id: 5, name: "Rice 5kg", price: 320, image: "https://via.placeholder.com/300", category: "food" },
+    { id: 6, name: "Cooking Oil", price: 180, image: "https://via.placeholder.com/300", category: "food" },
+
+    // 🧴 Daily Needs
+    { id: 7, name: "Bath Soap", price: 45, image: "https://via.placeholder.com/300", category: "daily" },
+    { id: 8, name: "Toothpaste", price: 95, image: "https://via.placeholder.com/300", category: "daily" },
+
+    // 💄 Makeup
+    { id: 9, name: "Lipstick", price: 199, image: "https://via.placeholder.com/300", category: "makeup" },
+    { id: 10, name: "Face Cream", price: 249, image: "https://via.placeholder.com/300", category: "makeup" },
+
+    // 👟 Shoes
+    { id: 11, name: "Men Shoes", price: 1499, image: "https://via.placeholder.com/300", category: "shoes" },
+    { id: 12, name: "Women Sandal", price: 999, image: "https://via.placeholder.com/300", category: "shoes" }
+];
