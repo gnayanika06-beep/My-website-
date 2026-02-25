@@ -115,4 +115,20 @@ button:hover {
         flex-direction: column;
         text-align: center;
     }
+}.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.category-buttons button {
+    background: #333;
+    color: #fff;
+    border-radius: 20px;
+    padding: 8px 15px;
+}
+
+.category-buttons button:hover {
+    background: #4CAF50;
 }
