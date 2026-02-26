@@ -1,4 +1,4 @@
-const products = [
+
 
     // 👕 MEN CLOTHING
     {
