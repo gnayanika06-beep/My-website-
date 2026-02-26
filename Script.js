@@ -1,30 +1,102 @@
 const products = [
-    { id: 1, name: "Men T-Shirt", price: 399, image: "https://via.placeholder.com/300", category: "men" },
-    { id: 2, name: "Men Jeans", price: 899, image: "https://via.placeholder.com/300", category: "men" },
+    const products = [
 
-    { id: 3, name: "Women Kurti", price: 599, image: "https://via.placeholder.com/300", category: "women" },
-    { id: 4, name: "Women Top", price: 499, image: "https://via.placeholder.com/300", category: "women" },
+    // 👕 MEN CLOTHING
+    {
+        id: 1,
+        name: "Men Casual T-Shirt",
+        price: 499,
+        image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+        category: "men"
+    },
+    {
+        id: 2,
+        name: "Men Blue Jeans",
+        price: 1199,
+        image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246",
+        category: "men"
+    },
 
-    { id: 5, name: "Rice 5kg", price: 320, image: "https://via.placeholder.com/300", category: "food" },
-    { id: 6, name: "Cooking Oil", price: 180, image: "https://via.placeholder.com/300", category: "food" },
+    // 👗 WOMEN CLOTHING
+    {
+        id: 3,
+        name: "Women Kurti",
+        price: 799,
+        image: "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03",
+        category: "women"
+    },
+    {
+        id: 4,
+        name: "Women Stylish Top",
+        price: 599,
+        image: "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc",
+        category: "women"
+    },
 
-    { id: 7, name: "Bath Soap", price: 45, image: "https://via.placeholder.com/300", category: "daily" },
-    { id: 8, name: "Toothpaste", price: 95, image: "https://via.placeholder.com/300", category: "daily" },
+    // 🍚 FOOD ITEMS
+    {
+        id: 5,
+        name: "Premium Basmati Rice 5kg",
+        price: 450,
+        image: "https://images.unsplash.com/photo-1586201375761-83865001e31c",
+        category: "food"
+    },
+    {
+        id: 6,
+        name: "Sunflower Cooking Oil",
+        price: 180,
+        image: "https://images.unsplash.com/photo-1604908554027-1a92a5e4e3d3",
+        category: "food"
+    },
 
-    { id: 9, name: "Lipstick", price: 199, image: "https://via.placeholder.com/300", category: "makeup" },
-    { id: 10, name: "Face Cream", price: 249, image: "https://via.placeholder.com/300", category: "makeup" },
+    // 🧴 DAILY NEEDS
+    {
+        id: 7,
+        name: "Bath Soap Pack",
+        price: 120,
+        image: "https://images.unsplash.com/photo-1606813909353-6c3b8b3d2d8a",
+        category: "daily"
+    },
+    {
+        id: 8,
+        name: "Toothpaste",
+        price: 95,
+        image: "https://images.unsplash.com/photo-1588776814546-ec7e0b4d4c55",
+        category: "daily"
+    },
 
-    { id: 11, name: "Men Shoes", price: 1499, image: "https://via.placeholder.com/300", category: "shoes" },
-    { id: 12, name: "Women Sandal", price: 999, image: "https://via.placeholder.com/300", category: "shoes" }
+    // 💄 MAKEUP
+    {
+        id: 9,
+        name: "Matte Lipstick",
+        price: 299,
+        image: "https://images.unsplash.com/photo-1586495777744-4413f21062fa",
+        category: "makeup"
+    },
+    {
+        id: 10,
+        name: "Face Cream",
+        price: 349,
+        image: "https://images.unsplash.com/photo-1601049676869-702ea24cfd58",
+        category: "makeup"
+    },
+
+    // 👟 SHOES
+    {
+        id: 11,
+        name: "Men Sports Shoes",
+        price: 1999,
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+        category: "shoes"
+    },
+    {
+        id: 12,
+        name: "Women Sandals",
+        price: 999,
+        image: "https://images.unsplash.com/photo-1528701800489-20be3c4d3c61",
+        category: "shoes"
+    }
 ];
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function updateCartCount() {
-    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const el = document.getElementById("cart-count");
-    if (el) el.textContent = count;
-}
 
 function renderProducts(category = "all") {
     const grid = document.querySelector(".product-grid");
