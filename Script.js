@@ -1,5 +1,4 @@
 const products = [
-    const products = [
 
     // 👕 MEN CLOTHING
     {
