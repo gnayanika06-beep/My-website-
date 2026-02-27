@@ -18,7 +18,12 @@
 <main>
     <div id="cart-items"></div>
     <h2 id="cart-total">Total: ₹0</h2>
-    <button onclick="buyNow()" id="buy-now">Buy Now</button>
+
+    <!-- WhatsApp Order -->
+    <button onclick="buyNow()" id="buy-now">Order on WhatsApp</button>
+
+    <!-- Direct Order -->
+    <button onclick="placeOrder()" id="buy-now">Place Order</button>
 </main>
 
 <script>
@@ -74,11 +79,6 @@ function buyNow() {
     window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
 }
 
-renderCart();
-</script>
-
-</body>
-</html>
 function placeOrder() {
     if (cart.length === 0) {
         alert("Cart is empty");
@@ -86,8 +86,13 @@ function placeOrder() {
     }
 
     alert("Order placed successfully!");
-
     cart = [];
     localStorage.removeItem("cart");
     renderCart();
 }
+
+renderCart();
+</script>
+
+</body>
+</html>
