@@ -19,7 +19,19 @@
 <main>
     <section id="products">
         <h2>Products</h2>
+<input 
+    type="text" 
+    id="searchInput" 
+    placeholder="Search products..." 
+    onkeyup="searchProducts()"
+    style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;"
+>
 
+<select onchange="sortProducts(this.value)" style="padding:10px; margin-bottom:10px; border-radius:8px;">
+    <option value="default">Sort By</option>
+    <option value="low">Price Low → High</option>
+    <option value="high">Price High → Low</option>
+</select>
         <div class="category-buttons">
             <button onclick="filterCategory('all')">All</button>
             <button onclick="filterCategory('men')">Men</button>
