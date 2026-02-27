@@ -149,3 +149,42 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCount();
     renderProducts("all");
 });
+function searchProducts() {
+    const text = document.getElementById("searchInput").value.toLowerCase();
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(product => {
+        const name = product.querySelector("h3").textContent.toLowerCase();
+        product.style.display = name.includes(text) ? "block" : "none";
+    });
+}
+
+function sortProducts(type) {
+    const grid = document.querySelector(".product-grid");
+    const items = Array.from(grid.children);
+
+    items.sort((a, b) => {
+        const priceA = Number(a.getAttribute("data-price"));
+        const priceB = Number(b.getAttribute("data-price"));
+
+        if (type === "low") return priceA - priceB;
+        if (type === "high") return priceB - priceA;
+        return 0;
+    });
+
+    grid.innerHTML = "";
+    items.forEach(item => grid.appendChild(item));
+}
+
+function filterCategory(category) {
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(product => {
+        if (category === "all") {
+            product.style.display = "block";
+        } else {
+            product.style.display =
+                product.dataset.category === category ? "block" : "none";
+        }
+    });
+}
