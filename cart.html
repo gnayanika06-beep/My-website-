@@ -80,3 +80,15 @@ renderCart();
 
 </body>
 </html>
+function placeOrder() {
+    if (cart.length === 0) {
+        alert("Cart is empty");
+        return;
+    }
+
+    alert("Order placed successfully!");
+
+    cart = [];
+    localStorage.removeItem("cart");
+    renderCart();
+}
