@@ -116,8 +116,10 @@ function renderProducts(category = "all") {
         : products.filter(p => p.category === category);
 
     filtered.forEach(product => {
-        const div = document.createElement("div");
-        div.className = "product";
+       const div = document.createElement("div");
+div.className = "product";
+div.setAttribute("data-category", product.category);
+div.setAttribute("data-price", product.price); ;
         div.innerHTML = `
             <img src="${product.image}">
             <h3>${product.name}</h3>
@@ -128,9 +130,7 @@ function renderProducts(category = "all") {
     });
 }
 
-function filterCategory(cat) {
-    renderProducts(cat);
-}
+
 
 function addToCart(id) {
     const product = products.find(p => p.id === id);
