@@ -58,15 +58,19 @@ function renderProduct() {
     }
 
     container.innerHTML = `
-        <div class="product-details-box">
-            <img src="${product.image}">
-            <h2>${product.name}</h2>
-            <h3>₹${product.price}</h3>
-            <p>High quality product with premium material.</p>
-      <input type="number" id="qty" value="1" min="1">
-   
-<button onclick="addToCart(${product.id})">Add to Cart</button>
-        </div>
+    <div class="product-details-box">
+        <img src="${product.image}">
+        <h2>${product.name}</h2>
+        <h3>₹${product.price}</h3>
+        <p>High quality product with premium material.</p>
+
+        <input type="number" id="qty" value="1" min="1">
+
+        <button onclick="addToCart(${product.id})">Add to Cart</button>
+
+        <button onclick="buyNowSingle(${product.id})">Buy Now</button>
+    </div>
+`;
 <button onclick="buyNowSingle(${product.id})">Buy Now</button>
     `;
 }
