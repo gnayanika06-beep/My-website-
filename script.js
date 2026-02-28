@@ -40,11 +40,13 @@ function renderProducts() {
     filtered.forEach(product => {
         const div = document.createElement("div");
         div.className = "product";
+
         div.innerHTML = `
-            <img src="${product.image}">
-            <h3>${product.name}</h3>
-            <p>₹${product.price}</p>
-            <button onclick="addToCart(${product.id})">Add to Cart</button>
+    <img src="${product.image}" onclick="openProduct(${product.id})" style="cursor:pointer">
+    <h3 onclick="openProduct(${product.id})" style="cursor:pointer">${product.name}</h3>
+    <p>₹${product.price}</p>
+    <button onclick="addToCart(${product.id})">Add to Cart</button>
+`;
         `;
         grid.appendChild(div);
     });
