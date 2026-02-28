@@ -67,6 +67,7 @@ function renderProduct() {
    
 <button onclick="addToCart(${product.id})">Add to Cart</button>
         </div>
+<button onclick="buyNowSingle(${product.id})">Buy Now</button>
     `;
 }
 
