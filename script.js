@@ -47,7 +47,6 @@ function renderProducts() {
     <p>₹${product.price}</p>
     <button onclick="addToCart(${product.id})">Add to Cart</button>
 `;
-        `;
         grid.appendChild(div);
     });
 }
