@@ -24,6 +24,8 @@ function updateCartCount() {
 
 function renderProducts() {
     const grid = document.querySelector(".product-grid");
+    if (!grid) return;
+
     grid.innerHTML = "";
 
     let filtered = currentCategory === "all"
@@ -42,11 +44,12 @@ function renderProducts() {
         div.className = "product";
 
         div.innerHTML = `
-    <img src="${product.image}" onclick="openProduct(${product.id})" style="cursor:pointer">
-    <h3 onclick="openProduct(${product.id})" style="cursor:pointer">${product.name}</h3>
-    <p>₹${product.price}</p>
-    <button onclick="addToCart(${product.id})">Add to Cart</button>
-;
+            <img src="${product.image}" onclick="openProduct(${product.id})" style="cursor:pointer">
+            <h3 onclick="openProduct(${product.id})" style="cursor:pointer">${product.name}</h3>
+            <p>₹${product.price}</p>
+            <button onclick="addToCart(${product.id})">Add to Cart</button>
+        `;
+
         grid.appendChild(div);
     });
 }
@@ -74,6 +77,11 @@ function addToCart(id) {
     localStorage.setItem("cart", JSON.stringify(cart));
     updateCartCount();
     alert("Added to cart");
+}
+
+function openProduct(id) {
+    localStorage.setItem("selectedProduct", id);
+    window.location.href = "product.html";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
