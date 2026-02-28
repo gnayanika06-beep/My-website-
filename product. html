@@ -63,7 +63,9 @@ function renderProduct() {
             <h2>${product.name}</h2>
             <h3>₹${product.price}</h3>
             <p>High quality product with premium material.</p>
-            <button onclick="addToCart(${product.id})">Add to Cart</button>
+      <input type="number" id="qty" value="1" min="1">
+   
+<button onclick="addToCart(${product.id})">Add to Cart</button>
         </div>
     `;
 }
