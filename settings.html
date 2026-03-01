@@ -10,6 +10,9 @@
 
 <input type="text" id="phoneInput" placeholder="Enter WhatsApp Number">
 <button onclick="savePhone()">Save Number</button>
+    <h3>Shop Name</h3>
+<input type="text" id="shopNameInput" placeholder="Enter Shop Name">
+<button onclick="saveShopName()">Save Shop Name</button>
 <script>
 document.getElementById("phoneInput").value =
 localStorage.getItem("shopPhone") || "";
@@ -21,6 +24,16 @@ function savePhone() {
     alert("Number saved successfully");
 }
 </script>
-
+<script>
+function saveShopName() {
+    const name = document.getElementById("shopNameInput").value;
+    localStorage.setItem("shopName", name);
+    alert("Shop name saved");
+}
+</script>
+    <script>
+document.getElementById("shopNameInput").value =
+localStorage.getItem("shopName") || "";
+    </script>
 </body>
 </html>
