@@ -88,4 +88,14 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCount();
     renderProducts();
 });
+function buyNowSingle(id) {
+    const quantity = parseInt(document.getElementById("qty").value);
+    const product = products.find(p => p.id == id);
 
+    let message = "New Order:%0A";
+    message += product.name + " x " + quantity + "%0A";
+    message += "Total: ₹" + (product.price * quantity);
+
+    const phone = getShopPhone();
+    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
+}
