@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Shop Settings</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h2>Shop Settings</h2>
+
+<input type="text" id="phoneInput" placeholder="Enter WhatsApp Number">
+<button onclick="savePhone()">Save Number</button>
+
+<script>
+function savePhone() {
+    const phone = document.getElementById("phoneInput").value;
+    localStorage.setItem("shopPhone", phone);
+    alert("Number saved successfully");
+}
+</script>
+
+</body>
+</html>
