@@ -12,7 +12,7 @@
     <h1 id="shopName">Simple Shop</h1>
     <nav>
         <a href="index.html">Home</a>
-        <ahref="cart.html">Cart (<span id="cart-count">0</span>)</a>
+        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
         <a href="settings.html">Settings</a>    
     </nav>
 </header>
@@ -48,9 +48,11 @@
 </main>
 
 <script src="script.js"></script>
+
 <script>
 document.getElementById("shopName").textContent =
 localStorage.getItem("shopName") || "Simple Shop";
 </script>
+
 </body>
 </html>
