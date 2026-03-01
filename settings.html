@@ -10,7 +10,10 @@
 
 <input type="text" id="phoneInput" placeholder="Enter WhatsApp Number">
 <button onclick="savePhone()">Save Number</button>
-
+<script>
+document.getElementById("phoneInput").value =
+localStorage.getItem("shopPhone") || "";
+</script>
 <script>
 function savePhone() {
     const phone = document.getElementById("phoneInput").value;
