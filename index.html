@@ -53,6 +53,10 @@
 document.getElementById("shopName").textContent =
 localStorage.getItem("shopName") || "Simple Shop";
 </script>
-
+<script>
+const shopName = localStorage.getItem("shopName") || "Simple Shop";
+document.getElementById("shopName").textContent = shopName;
+document.title = shopName;
+</script>
 </body>
 </html>
