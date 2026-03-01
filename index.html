@@ -9,7 +9,7 @@
 <body>
 
 <header>
-    <h1>Simple Shop</h1>
+    <h1 id="shopName">Simple Shop</h1>
     <nav>
         <a href="index.html">Home</a>
         <ahref="cart.html">Cart (<span id="cart-count">0</span>)</a>
@@ -48,6 +48,9 @@
 </main>
 
 <script src="script.js"></script>
-
+<script>
+document.getElementById("shopName").textContent =
+localStorage.getItem("shopName") || "Simple Shop";
+</script>
 </body>
 </html>
