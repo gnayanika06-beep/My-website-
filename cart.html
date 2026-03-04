@@ -19,11 +19,8 @@
     <div id="cart-items"></div>
     <h2 id="cart-total">Total: ₹0</h2>
 
-    <!-- WhatsApp Order -->
     <button onclick="orderOnWhatsApp()">Order on WhatsApp</button>
-
-    <!-- Direct Order -->
-    <button onclick="placeOrder()" id="buy-now">Place Order</button>
+    <button onclick="placeOrder()">Place Order</button>
 </main>
 
 <script>
@@ -61,22 +58,34 @@ function renderCart() {
     totalEl.textContent = "Total: ₹" + total;
 }
 
-function buyNow() {
+function orderOnWhatsApp() {
     if (cart.length === 0) {
-        alert("Cart is empty");
+        alert("Your cart is empty");
         return;
     }
 
-    let message = "New Order:%0A";
+    const phone = localStorage.getItem("shopPhone") || "91XXXXXXXXXX";
+    const shopName = localStorage.getItem("shopName") || "Simple Shop";
 
-    cart.forEach(item => {
-        message += item.name + " x " + item.quantity + "%0A";
+    let message = "🛒 *New Order*\n\n";
+    message += "🏪 Shop: " + shopName + "\n\n";
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        message += (index + 1) + ". " + item.name + "\n";
+        message += "   Qty: " + item.quantity + "\n";
+        message += "   Price: ₹" + item.price + "\n\n";
+        total += item.price * item.quantity;
     });
 
-    message += "%0ATotal: ₹" + cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    message += "-----------------------\n";
+    message += "💰 Total: ₹" + total + "\n";
+    message += "-----------------------\n";
+    message += "Thank you!";
 
-    const phone = "91XXXXXXXXXX"; // এখানে নিজের WhatsApp number দাও
-    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
+    const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, "_blank");
 }
 
 function placeOrder() {
@@ -92,75 +101,7 @@ function placeOrder() {
 }
 
 renderCart();
-<script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-/* সব আগের function থাকবে */
-
-function orderOnWhatsApp() {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const phone = localStorage.getItem("shopPhone") || "880XXXXXXXXXX";
-    const shopName = localStorage.getItem("shopName") || "Simple Shop";
-
-    if (cart.length === 0) {
-        alert("Your cart is empty");
-        return;
-    }
-
-    let message = "🛒 *New Order*\n\n";
-    message += "🏪 Shop: " + shopName + "\n\n";
-
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        message += (index + 1) + ". " + item.name + "\n";
-        message += "   Qty: " + item.quantity + "\n";
-        message += "   Price: ₹" + item.price + "\n\n";
-        total += item.price * item.quantity;
-    });
-
-    message += "-----------------------\n";
-    message += "💰 Total: ₹" + total + "\n";
-    message += "-----------------------\n";
-    message += "Thank you!";
-
-    const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, "_blank");
-}
-
-renderCart();
-</script>
 </script>
 
 </body>
 </html>
-function orderOnWhatsApp() {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const phone = localStorage.getItem("shopPhone") || "880XXXXXXXXXX";
-    const shopName = localStorage.getItem("shopName") || "Simple Shop";
-
-    if (cart.length === 0) {
-        alert("Your cart is empty");
-        return;
-    }
-
-    let message = "🛒 *New Order*\n\n";
-    message += "🏪 Shop: " + shopName + "\n\n";
-
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        message += (index + 1) + ". " + item.name + "\n";
-        message += "   Qty: " + item.quantity + "\n";
-        message += "   Price: ₹" + item.price + "\n\n";
-        total += item.price * item.quantity;
-    });
-
-    message += "-----------------------\n";
-    message += "💰 Total: ₹" + total + "\n";
-    message += "-----------------------\n";
-    message += "Thank you!";
-
-    const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, "_blank");
-}
