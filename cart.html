@@ -92,6 +92,44 @@ function placeOrder() {
 }
 
 renderCart();
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+/* সব আগের function থাকবে */
+
+function orderOnWhatsApp() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const phone = localStorage.getItem("shopPhone") || "880XXXXXXXXXX";
+    const shopName = localStorage.getItem("shopName") || "Simple Shop";
+
+    if (cart.length === 0) {
+        alert("Your cart is empty");
+        return;
+    }
+
+    let message = "🛒 *New Order*\n\n";
+    message += "🏪 Shop: " + shopName + "\n\n";
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        message += (index + 1) + ". " + item.name + "\n";
+        message += "   Qty: " + item.quantity + "\n";
+        message += "   Price: ₹" + item.price + "\n\n";
+        total += item.price * item.quantity;
+    });
+
+    message += "-----------------------\n";
+    message += "💰 Total: ₹" + total + "\n";
+    message += "-----------------------\n";
+    message += "Thank you!";
+
+    const whatsappURL = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, "_blank");
+}
+
+renderCart();
+</script>
 </script>
 
 </body>
