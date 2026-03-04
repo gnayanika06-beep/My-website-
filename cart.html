@@ -75,19 +75,6 @@ function orderOnWhatsApp() {
     window.open(url, "_blank");
 }
 
-    let message = "New Order:\n\n";
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        message += (index + 1) + ". " + item.name + " x " + item.quantity + "\n";
-        total += item.price * item.quantity;
-    });
-
-    message += "\nTotal: ₹" + total;
-
-    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
-}
 
 function placeOrder() {
     if (cart.length === 0) {
