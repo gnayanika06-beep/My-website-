@@ -1,62 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Shop</title>
-    <link rel="stylesheet" href="styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Shopping App</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header>
-    <h1 id="shopName">Simple Shop</h1>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-        <a href="settings.html">Settings</a>    
-    </nav>
-</header>
+<!-- Header -->
+<div class="header">
+<div class="logo">MyShop</div>
+<div class="icons">
+<span>❤️</span>
+<span>🛒</span>
+</div>
+</div>
 
-<main>
-    <section id="products">
-        <h2>Products</h2>
-<input 
-    type="text" 
-    id="searchInput" 
-    placeholder="Search products..." 
-    onkeyup="searchProducts()"
-    style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;"
->
+<!-- Search -->
+<div class="search">
+<input type="text" placeholder="Search products">
+</div>
 
-<select onchange="sortProducts(this.value)" style="padding:10px; margin-bottom:10px; border-radius:8px;">
-    <option value="default">Sort By</option>
-    <option value="low">Price Low → High</option>
-    <option value="high">Price High → Low</option>
-</select>
-        <div class="category-buttons">
-            <button onclick="filterCategory('all')">All</button>
-            <button onclick="filterCategory('men')">Men</button>
-            <button onclick="filterCategory('women')">Women</button>
-            <button onclick="filterCategory('food')">Food</button>
-            <button onclick="filterCategory('daily')">Daily Needs</button>
-            <button onclick="filterCategory('makeup')">Makeup</button>
-            <button onclick="filterCategory('shoes')">Shoes</button>
-        </div>
+<!-- Categories -->
+<div class="categories">
 
-        <div class="product-grid"></div>
-    </section>
-</main>
+<div class="cat">
+<img src="https://via.placeholder.com/60">
+<p>Fashion</p>
+</div>
 
-<script src="script.js"></script>
+<div class="cat">
+<img src="https://via.placeholder.com/60">
+<p>Beauty</p>
+</div>
 
-<script>
-document.getElementById("shopName").textContent =
-localStorage.getItem("shopName") || "Simple Shop";
-</script>
-<script>
-const shopName = localStorage.getItem("shopName") || "Simple Shop";
-document.getElementById("shopName").textContent = shopName;
-document.title = shopName;
-</script>
+<div class="cat">
+<img src="https://via.placeholder.com/60">
+<p>Kids</p>
+</div>
+
+<div class="cat">
+<img src="https://via.placeholder.com/60">
+<p>Kitchen</p>
+</div>
+
+</div>
+
+<!-- Products -->
+<div class="products">
+
+<div class="product">
+<img src="https://via.placeholder.com/150">
+<h4>Stylish Dress</h4>
+<p>₹299</p>
+<button>Buy Now</button>
+</div>
+
+<div class="product">
+<img src="https://via.placeholder.com/150">
+<h4>Hand Bag</h4>
+<p>₹199</p>
+<button>Buy Now</button>
+</div>
+
+</div>
+
+<!-- Bottom Menu -->
+<div class="bottom-nav">
+<div>🏠 Home</div>
+<div>📂 Categories</div>
+<div>⭐ Mall</div>
+<div>📦 Orders</div>
+</div>
+
 </body>
 </html>
