@@ -62,7 +62,9 @@ grid.innerHTML += `
 <img src="${p.image}">
 <h4>${p.name}</h4>
 <p>₹${p.price}</p>
-<button>Add to Cart</button>
+<button onclick="addToCart('${p.name}', '${p.price}', '${p.image}')">
+Add to Cart
+</button>
 </div>
 `;
 
@@ -78,6 +80,22 @@ showProducts();
 <script src="script.js"></script>
 
 <script>
+    function addToCart(name, price, image) {
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+cart.push({
+name: name,
+price: price,
+image: image,
+quantity: 1
+});
+
+localStorage.setItem("cart", JSON.stringify(cart));
+
+alert("Product added to cart");
+
+    }
 document.getElementById("shopName").textContent =
 localStorage.getItem("shopName") || "Simple Shop";
 </script>
