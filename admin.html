@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+</head>
+
+<body>
+
+<h2>Admin Panel</h2>
+
+<h3>Add Product</h3>
+
+<input type="text" id="name" placeholder="Product Name"><br><br>
+<input type="number" id="price" placeholder="Price"><br><br>
+<input type="text" id="image" placeholder="Image URL"><br><br>
+
+<button onclick="addProduct()">Add Product</button>
+
+<h3>Product List</h3>
+<div id="productList"></div>
+
+<script>
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function showProducts(){
+
+let list = document.getElementById("productList");
+list.innerHTML = "";
+
+products.forEach((p,i)=>{
+
+list.innerHTML += `
+<div>
+${p.name} - ₹${p.price}
+<button onclick="deleteProduct(${i})">Delete</button>
+</div>
+`;
+
+});
+
+}
+
+function addProduct(){
+
+let name = document.getElementById("name").value;
+let price = document.getElementById("price").value;
+let image = document.getElementById("image").value;
+
+products.push({name,price,image});
+
+localStorage.setItem("products",JSON.stringify(products));
+
+showProducts();
+
+}
+
+function deleteProduct(i){
+
+products.splice(i,1);
+
+localStorage.setItem("products",JSON.stringify(products));
+
+showProducts();
+
+}
+
+showProducts();
+
+</script>
+
+</body>
+</html>
