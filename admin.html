@@ -41,9 +41,9 @@
 
 function login(){
 
-let pass = document.getElementById("adminPass").value;
+let pass = document.getElementById("adminPass").value.trim();
 
-if(pass === "1234"){
+if(pass == "1234"){
 document.getElementById("loginBox").style.display = "none";
 document.getElementById("adminPanel").style.display = "block";
 }else{
