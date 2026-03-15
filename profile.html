@@ -1,0 +1,35 @@
+<!DOCTYPE html><html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile</title>
+</head><body><h2>User Profile</h2><input type="text" id="userName" placeholder="Your Name">
+<br><br><input type="text" id="userPhone" placeholder="Phone Number">
+<br><br><textarea id="userAddress" placeholder="Delivery Address"></textarea><br><br>
+
+<label>Dark Mode</label>
+<input type="checkbox" id="darkMode">
+
+<br><br>
+
+<button onclick="saveUser()">Save</button>
+
+<script>
+
+function saveUser(){
+
+let name = document.getElementById("userName").value;
+let phone = document.getElementById("userPhone").value;
+let address = document.getElementById("userAddress").value;
+let dark = document.getElementById("darkMode").checked;
+
+localStorage.setItem("userName", name);
+localStorage.setItem("userPhone", phone);
+localStorage.setItem("userAddress", address);
+localStorage.setItem("darkMode", dark);
+
+alert("Profile Saved");
+
+}
+
+</script></body>
+</html>
