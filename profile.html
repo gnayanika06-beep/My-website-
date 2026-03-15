@@ -2,6 +2,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>User Profile</title>
+<link rel="stylesheet" href="styles.css">
 </head><body><h2>User Profile</h2><input type="text" id="userName" placeholder="Your Name">
 <br><br><input type="text" id="userPhone" placeholder="Phone Number">
 <br><br><textarea id="userAddress" placeholder="Delivery Address"></textarea><br><br>
@@ -30,12 +31,30 @@ localStorage.setItem("darkMode", dark);
 alert("Profile Saved");
 
 }
-  if(localStorage.getItem("darkMode") === "true"){
-document.body.style.background = "black";
-document.body.style.color = "white";
-  }
-  </script>
-<div class="bottom-nav"><a href="index.html">🏠<br>Home</a>
+
+/* Load saved data */
+
+document.getElementById("userName").value =
+localStorage.getItem("userName") || "";
+
+document.getElementById("userPhone").value =
+localStorage.getItem("userPhone") || "";
+
+document.getElementById("userAddress").value =
+localStorage.getItem("userAddress") || "";
+
+/* Dark Mode */
+
+if(localStorage.getItem("darkMode") === "true"){
+
+document.body.style.background="black";
+document.body.style.color="white";
+
+document.getElementById("darkMode").checked = true;
+
+}
+
+</script><div class="bottom-nav"><a href="index.html">🏠<br>Home</a>
 
 <a href="#">📂<br>Categories</a>
 
@@ -45,6 +64,5 @@ document.body.style.color = "white";
 
 <a href="profile.html">👤<br>Profile</a>
 
-</div>
-</body>
+</div></body>
 </html>
