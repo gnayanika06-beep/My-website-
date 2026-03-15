@@ -1,118 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Your Cart</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Your Cart</title>
+<link rel="stylesheet" href="styles.css">
 </head>
-    <br><br>
 
-<button onclick="placeOrder()" 
-style="padding:12px; background:green; color:white; border:none; border-radius:8px;">
-Place Order
-</button>
 <body>
 
 <header>
-    <h1>Your Cart</h1>
-    <a href="index.html">Home</a>
+<h1>Your Cart</h1>
+<a href="index.html">Home</a>
 </header>
 
 <main>
-    <div id="cart-items"></div>
-    <h2 id="cart-total">Total: ₹0</h2>
 
-    <!-- Customer Info -->
-    <input type="text" id="customerName" placeholder="Your Name" required>
-    <br><br>
-    <textarea id="customerAddress" placeholder="Your Delivery Address" required></textarea>
-    <br><br>
+<div id="cart-items"></div>
 
-    <button onclick="orderOnWhatsApp()">Order on WhatsApp</button>
-    <button onclick="placeOrder()">Place Order</button>
+<h2 id="cart-total">Total: ₹0</h2>
+
+<br>
+
+<input type="text" id="customerName" placeholder="Your Name">
+
+<br><br>
+
+<textarea id="customerAddress" placeholder="Your Delivery Address"></textarea>
+
+<br><br>
+
+<button onclick="orderOnWhatsApp()">Order on WhatsApp</button>
+
+<button onclick="placeOrder()">Place Order</button>
+
 </main>
 
 <script>
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-/* Remove Item */
-function removeItem(id) {
-    cart = cart.filter(item => item.id !== id);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
+function removeItem(index){
+
+cart.splice(index,1);
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+renderCart();
+
 }
 
-/* Render Cart */
-function renderCart() {
-    const container = document.getElementById("cart-items");
-    const totalEl = document.getElementById("cart-total");
+function renderCart(){
 
-    container.innerHTML = "";
-    let total = 0;
+let container = document.getElementById("cart-items");
+let totalEl = document.getElementById("cart-total");
 
-    cart.forEach(item => {
-        total += item.price * item.quantity;
+container.innerHTML = "";
 
-        const div = document.createElement("div");
-        div.innerHTML = `
-            <p>${item.name} - ₹${item.price} × ${item.quantity}</p>
-            <button onclick="removeItem(${item.id})">Remove</button>
-        `;
-        container.appendChild(div);
-    });
+let total = 0;
 
-    totalEl.textContent = "Total: ₹" + total;
+cart.forEach((item,i)=>{
+
+total += item.price * item.quantity;
+
+container.innerHTML += `
+<div>
+<p>${item.name} - ₹${item.price} × ${item.quantity}</p>
+<button onclick="removeItem(${i})">Remove</button>
+</div>
+`;
+
+});
+
+totalEl.textContent = "Total: ₹" + total;
+
 }
 
-/* WhatsApp Order */
-function orderOnWhatsApp() {
+function orderOnWhatsApp(){
 
-    if (cart.length === 0) {
-        alert("Your cart is empty");
-        return;
-    }
-
-    const name = document.getElementById("customerName").value;
-    const address = document.getElementById("customerAddress").value;
-
-    if (!name || !address) {
-        alert("Please enter your name and address");
-        return;
-    }
-
-    const phone = "91XXXXXXXXXX";  // 👉 এখানে নিজের WhatsApp নম্বর দাও
-    const orderID = "ORD" + Math.floor(Math.random() * 100000);
-
-    let message = "🛒 New Order\n\n";
-    message += "🆔 Order ID: " + orderID + "\n";
-    message += "👤 Name: " + name + "\n";
-    message += "📍 Address: " + address + "\n\n";
-
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        message += (index + 1) + ". " + item.name + " x " + item.quantity + "\n";
-        total += item.price * item.quantity;
-    });
-
-    message += "\n💰 Total: ₹" + total;
-
-    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+if(cart.length == 0){
+alert("Your cart is empty");
+return;
 }
 
-/* Direct Order */
-function placeOrder() {
-    if (cart.length === 0) {
-        alert("Cart is empty");
-        return;
-    }
+let name = document.getElementById("customerName").value;
 
-    alert("Order placed successfully!");
-    cart = [];
-    localStorage.removeItem("cart");
-    renderCart();
+let address = document.getElementById("customerAddress").value;
+
+if(name == "" || address == ""){
+alert("Please enter your name and address");
+return;
+}
+
+let phone = "919876543210";   // এখানে WhatsApp number বসাও
+
+let message = "New Order%0A%0A";
+
+message += "Name: " + name + "%0A";
+message += "Address: " + address + "%0A%0A";
+
+let total = 0;
+
+cart.forEach((item,i)=>{
+
+message += (i+1) + ". " + item.name + " x " + item.quantity + "%0A";
+
+total += item.price * item.quantity;
+
+});
+
+message += "%0ATotal: ₹" + total;
+
+let url = "https://wa.me/" + phone + "?text=" + message;
+
+window.open(url);
+
+}
+
+function placeOrder(){
+
+if(cart.length == 0){
+alert("Cart is empty");
+return;
+}
+
+alert("Order placed successfully!");
+
+cart = [];
+
+localStorage.removeItem("cart");
+
+renderCart();
+
 }
 
 renderCart();
