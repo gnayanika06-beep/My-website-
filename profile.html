@@ -30,6 +30,10 @@ localStorage.setItem("darkMode", dark);
 alert("Profile Saved");
 
 }
+  if(localStorage.getItem("darkMode") === "true"){
+document.body.style.background = "black";
+document.body.style.color = "white";
+  }
   </script>
 <div class="bottom-nav"><a href="index.html">🏠<br>Home</a>
 
