@@ -1,61 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Shop</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-    <div class="bottom-nav"><a href="index.html">🏠<br>Home</a>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Shop</title>
+<link rel="stylesheet" href="styles.css">
+</head><body><header>
+<h1 id="shopName">Simple Shop</h1><nav>
+<a href="index.html">Home</a>
+<a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+<a href="settings.html">Settings</a>
+</nav></header><main><section id="products"><h2>Products</h2><input
+type="text"
+id="searchInput"
+placeholder="Search products..."
+onkeyup="searchProducts()"
+style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;"
 
-<a href="#">📂<br>Categories</a>
+«»
 
-<a href="cart.html">🛒<br>Cart</a>
+<select onchange="sortProducts(this.value)"
+style="padding:10px; margin-bottom:10px; border-radius:8px;">
 
-<a href="#">📦<br>Orders</a>
+<option value="default">Sort By</option>
+<option value="low">Price Low → High</option>
+<option value="high">Price High → Low</option>
+</select><div class="category-buttons"><button onclick="filterCategory('all')">All</button>
+<button onclick="filterCategory('men')">Men</button>
+<button onclick="filterCategory('women')">Women</button>
+<button onclick="filterCategory('food')">Food</button>
+<button onclick="filterCategory('daily')">Daily Needs</button>
+<button onclick="filterCategory('makeup')">Makeup</button>
+<button onclick="filterCategory('shoes')">Shoes</button>
 
-<a href="profile.html">👤<br>Profile</a>
+</div><div class="product-grid"></div></section></main><script>
 
-    </div>
-<body>
-
-<header>
-    <h1 id="shopName">Simple Shop</h1>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-        <a href="settings.html">Settings</a>    
-    </nav>
-</header>
-
-<main>
-    <section id="products">
-        <h2>Products</h2>
-<input 
-    type="text" 
-    id="searchInput" 
-    placeholder="Search products..." 
-    onkeyup="searchProducts()"
-    style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;"
->
-
-<select onchange="sortProducts(this.value)" style="padding:10px; margin-bottom:10px; border-radius:8px;">
-    <option value="default">Sort By</option>
-    <option value="low">Price Low → High</option>
-    <option value="high">Price High → Low</option>
-</select>
-        <div class="category-buttons">
-            <button onclick="filterCategory('all')">All</button>
-            <button onclick="filterCategory('men')">Men</button>
-            <button onclick="filterCategory('women')">Women</button>
-            <button onclick="filterCategory('food')">Food</button>
-            <button onclick="filterCategory('daily')">Daily Needs</button>
-            <button onclick="filterCategory('makeup')">Makeup</button>
-            <button onclick="filterCategory('shoes')">Shoes</button>
-        </div>
-
-        <div class="product-grid"></div>
-        <script>
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
 function showProducts(){
@@ -73,7 +51,7 @@ grid.innerHTML += `
 <img src="${p.image}">
 <h4>${p.name}</h4>
 <p>₹${p.price}</p>
-<button onclick="addToCart('${p.name}', '${p.price}', '${p.image}')">
+<button onclick="addToCart('${p.name}','${p.price}','${p.image}')">
 Add to Cart
 </button>
 </div>
@@ -84,36 +62,41 @@ Add to Cart
 }
 
 showProducts();
-        </script>
-    </section>
-</main>
 
-<script src="script.js"></script>
-
-<script>
-    function addToCart(name, price, image) {
+function addToCart(name,price,image){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 cart.push({
-name: name,
-price: price,
-image: image,
-quantity: 1
+name:name,
+price:price,
+image:image,
+quantity:1
 });
 
-localStorage.setItem("cart", JSON.stringify(cart));
+localStorage.setItem("cart",JSON.stringify(cart));
 
 alert("Product added to cart");
 
-    }
+}
+
+</script><script src="script.js"></script><script>
+
 document.getElementById("shopName").textContent =
 localStorage.getItem("shopName") || "Simple Shop";
-</script>
-<script>
+
 const shopName = localStorage.getItem("shopName") || "Simple Shop";
-document.getElementById("shopName").textContent = shopName;
 document.title = shopName;
-</script>
-</body>
+
+</script><!-- Bottom Navigation --><div class="bottom-nav"><a href="index.html">🏠<br>Home</a>
+
+<a href="#">📂<br>Categories</a>
+
+<a href="cart.html">🛒<br>Cart</a>
+
+<a href="#">📦<br>Orders</a>
+
+<a href="profile.html">👤<br>Profile</a>
+
+</div></body>
 </html>
