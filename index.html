@@ -65,13 +65,14 @@ let container = document.getElementById("productList");
 products.forEach(p => {
 
 container.innerHTML += `
-<div class="card">
+<div class="card" onclick="openProduct('${p.name}', '${p.price}', '${p.image}')">
 <img src="${p.image}">
 <h4>${p.name}</h4>
 <p>₹${p.price}</p>
-<button onclick="addToCart('${p.name}', '${p.price}', '${p.image}')">Add to Cart</button>
+<button onclick="event.stopPropagation(); addToCart('${p.name}', '${p.price}', '${p.image}')">
+Add to Cart
+</button>
 </div>
-`;
 
 });
 
