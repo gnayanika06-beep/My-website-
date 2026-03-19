@@ -1,102 +1,95 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simple Shop</title>
+<title>My Shop</title>
 <link rel="stylesheet" href="styles.css">
-</head><body><header>
-<h1 id="shopName">Simple Shop</h1><nav>
-<a href="index.html">Home</a>
-<a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-<a href="settings.html">Settings</a>
-</nav></header><main><section id="products"><h2>Products</h2><input
-type="text"
-id="searchInput"
-placeholder="Search products..."
-onkeyup="searchProducts()"
-style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;"
+</head>
 
-«»
+<body>
 
-<select onchange="sortProducts(this.value)"
-style="padding:10px; margin-bottom:10px; border-radius:8px;">
+<!-- Header -->
+<div class="header">
+<h2>MyShop</h2>
+<input type="text" placeholder="Search products...">
+</div>
 
-<option value="default">Sort By</option>
-<option value="low">Price Low → High</option>
-<option value="high">Price High → Low</option>
-</select><div class="category-buttons"><button onclick="filterCategory('all')">All</button>
-<button onclick="filterCategory('men')">Men</button>
-<button onclick="filterCategory('women')">Women</button>
-<button onclick="filterCategory('food')">Food</button>
-<button onclick="filterCategory('daily')">Daily Needs</button>
-<button onclick="filterCategory('makeup')">Makeup</button>
-<button onclick="filterCategory('shoes')">Shoes</button>
+<!-- Banner -->
+<div class="banner">
+<img src="https://images.unsplash.com/photo-1607083206968-13611e3d76db">
+</div>
 
-</div><div class="product-grid"></div></section></main><script>
+<!-- Categories -->
+<div class="categories">
+
+<div class="cat">
+<img src="https://cdn-icons-png.flaticon.com/128/892/892458.png">
+<p>Fashion</p>
+</div>
+
+<div class="cat">
+<img src="https://cdn-icons-png.flaticon.com/128/3075/3075977.png">
+<p>Beauty</p>
+</div>
+
+<div class="cat">
+<img src="https://cdn-icons-png.flaticon.com/128/3081/3081559.png">
+<p>Kids</p>
+</div>
+
+<div class="cat">
+<img src="https://cdn-icons-png.flaticon.com/128/1046/1046857.png">
+<p>Kitchen</p>
+</div>
+
+</div>
+
+<!-- Products -->
+<div class="products" id="productList"></div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+<a href="index.html">🏠<br>Home</a>
+<a href="#">📂<br>Categories</a>
+<a href="cart.html">🛒<br>Cart</a>
+<a href="#">📦<br>Orders</a>
+<a href="profile.html">👤<br>Profile</a>
+</div>
+
+<script>
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-function showProducts(){
+let container = document.getElementById("productList");
 
-let grid = document.querySelector(".product-grid");
+products.forEach(p => {
 
-if(!grid) return;
-
-grid.innerHTML = "";
-
-products.forEach(p=>{
-
-grid.innerHTML += `
-<div class="product">
+container.innerHTML += `
+<div class="card">
 <img src="${p.image}">
 <h4>${p.name}</h4>
 <p>₹${p.price}</p>
-<button onclick="addToCart('${p.name}','${p.price}','${p.image}')">
-Add to Cart
-</button>
+<button onclick="addToCart('${p.name}', '${p.price}', '${p.image}')">Add to Cart</button>
 </div>
 `;
 
 });
 
-}
-
-showProducts();
-
-function addToCart(name,price,image){
+function addToCart(name, price, image){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 cart.push({
-name:name,
-price:price,
-image:image,
-quantity:1
+name, price, image, quantity:1
 });
 
-localStorage.setItem("cart",JSON.stringify(cart));
+localStorage.setItem("cart", JSON.stringify(cart));
 
-alert("Product added to cart");
+alert("Added to cart");
 
 }
 
-</script><script src="script.js"></script><script>
+</script>
 
-document.getElementById("shopName").textContent =
-localStorage.getItem("shopName") || "Simple Shop";
-
-const shopName = localStorage.getItem("shopName") || "Simple Shop";
-document.title = shopName;
-
-</script><!-- Bottom Navigation --><div class="bottom-nav"><a href="index.html">🏠<br>Home</a>
-
-<a href="#">📂<br>Categories</a>
-
-<a href="cart.html">🛒<br>Cart</a>
-
-<a href="#">📦<br>Orders</a>
-
-<a href="profile.html">👤<br>Profile</a>
-
-</div></body>
+</body>
 </html>
