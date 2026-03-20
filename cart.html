@@ -39,23 +39,20 @@
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+/* Remove Item */
 function removeItem(index){
-
 cart.splice(index,1);
-
 localStorage.setItem("cart",JSON.stringify(cart));
-
 renderCart();
-
 }
 
+/* Show Cart */
 function renderCart(){
 
 let container = document.getElementById("cart-items");
 let totalEl = document.getElementById("cart-total");
 
 container.innerHTML = "";
-
 let total = 0;
 
 cart.forEach((item,i)=>{
@@ -75,6 +72,7 @@ totalEl.textContent = "Total: ₹" + total;
 
 }
 
+/* WhatsApp Order */
 function orderOnWhatsApp(){
 
 if(cart.length == 0){
@@ -83,7 +81,6 @@ return;
 }
 
 let name = document.getElementById("customerName").value;
-
 let address = document.getElementById("customerAddress").value;
 
 if(name == "" || address == ""){
@@ -91,38 +88,27 @@ alert("Please enter your name and address");
 return;
 }
 
-let phone = "919876543210";   // এখানে WhatsApp number বসাও
+let phone = "919876543210"; // 👉 নিজের নম্বর বসাও
 
 let message = "New Order%0A%0A";
-
 message += "Name: " + name + "%0A";
 message += "Address: " + address + "%0A%0A";
 
 let total = 0;
 
 cart.forEach((item,i)=>{
-
 message += (i+1) + ". " + item.name + " x " + item.quantity + "%0A";
-
 total += item.price * item.quantity;
-
 });
 
 message += "%0ATotal: ₹" + total;
 
 let url = "https://wa.me/" + phone + "?text=" + message;
-
 window.open(url);
 
 }
 
-function placeOrder(){
-
-if(cart.length == 0){
-alert("Cart is empty");
-return;
-}
-
+/* Save Order */
 function placeOrder(){
 
 if(cart.length == 0){
@@ -161,28 +147,24 @@ renderCart();
 
 }
 
-cart = [];
-
-localStorage.removeItem("cart");
-
-renderCart();
-
-}
-
 renderCart();
 
 </script>
-  
-<div class="bottom-nav"><a href="index.html">🏠<br>Home</a>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+
+<a href="index.html">🏠<br>Home</a>
 
 <a href="#">📂<br>Categories</a>
 
 <a href="cart.html">🛒<br>Cart</a>
 
-<a href="#">📦<br>Orders</a>
+<a href="orders.html">📦<br>Orders</a>
 
 <a href="profile.html">👤<br>Profile</a>
 
 </div>
+
 </body>
 </html>
