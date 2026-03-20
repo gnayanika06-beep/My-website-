@@ -123,7 +123,43 @@ alert("Cart is empty");
 return;
 }
 
-alert("Order placed successfully!");
+function placeOrder(){
+
+if(cart.length == 0){
+alert("Cart is empty");
+return;
+}
+
+let name = document.getElementById("customerName").value;
+let address = document.getElementById("customerAddress").value;
+
+if(name == "" || address == ""){
+alert("Enter name & address");
+return;
+}
+
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+let orderID = "ORD" + Math.floor(Math.random()*100000);
+
+orders.push({
+id: orderID,
+items: cart,
+name: name,
+address: address,
+status: "Pending"
+});
+
+localStorage.setItem("orders", JSON.stringify(orders));
+
+alert("Order Placed! ID: " + orderID);
+
+cart = [];
+localStorage.removeItem("cart");
+
+renderCart();
+
+}
 
 cart = [];
 
