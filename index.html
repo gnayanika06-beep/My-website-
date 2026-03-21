@@ -73,6 +73,10 @@ products.forEach(p => {
 
 let div = document.createElement("div");
 
+div.onclick = function(){
+window.location.href = `product.html?name=${p.name}&price=${p.price}&image=${p.image}`;
+};
+
 div.className = "card";
 
 div.innerHTML = `
