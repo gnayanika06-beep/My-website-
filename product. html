@@ -2,30 +2,37 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product</title>
+<title>Product Details</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<div id="productBox"></div>
+<h2>Product Details</h2>
+
+<div class="card" id="productDetails"></div>
+
+<button onclick="addToCart()">Add to Cart</button>
+<button onclick="buyNow()">Buy Now</button>
 
 <script>
 
-let p = JSON.parse(localStorage.getItem("viewProduct"));
+// Get product data from URL
+let urlParams = new URLSearchParams(window.location.search);
 
-let box = document.getElementById("productBox");
+let name = urlParams.get("name");
+let price = urlParams.get("price");
+let image = urlParams.get("image");
 
-box.innerHTML = `
-<img src="${p.image}" style="width:100%">
-<h2>${p.name}</h2>
-<h3>₹${p.price}</h3>
-<button onclick="addToCart('${p.name}', '${p.price}', '${p.image}')">
-Add to Cart
-</button>
+// Show product
+document.getElementById("productDetails").innerHTML = `
+<img src="${image}">
+<h3>${name}</h3>
+<p>₹${price}</p>
 `;
 
-function addToCart(name, price, image){
+// Add to Cart
+function addToCart(){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -36,7 +43,13 @@ localStorage.setItem("cart", JSON.stringify(cart));
 alert("Added to cart");
 
 }
-updateCartCount();
+
+// Buy Now
+function buyNow(){
+addToCart();
+window.location.href = "cart.html";
+}
+
 </script>
 
 </body>
