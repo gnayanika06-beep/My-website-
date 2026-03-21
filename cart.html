@@ -53,6 +53,7 @@ let container = document.getElementById("cart-items");
 let totalEl = document.getElementById("cart-total");
 
 container.innerHTML = "";
+
 let total = 0;
 
 cart.forEach((item,i)=>{
@@ -60,8 +61,16 @@ cart.forEach((item,i)=>{
 total += item.price * item.quantity;
 
 container.innerHTML += `
+<div class="card">
+<p>${item.name}</p>
+<p>₹${item.price}</p>
+
 <div>
-<p>${item.name} - ₹${item.price} × ${item.quantity}</p>
+<button onclick="changeQty(${i}, -1)">−</button>
+<span>${item.quantity}</span>
+<button onclick="changeQty(${i}, 1)">+</button>
+</div>
+
 <button onclick="removeItem(${i})">Remove</button>
 </div>
 `;
