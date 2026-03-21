@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Orders</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<h2 style="padding:10px;">My Orders</h2>
+<h2>My Orders</h2>
 
 <div id="orders"></div>
 
@@ -19,7 +18,7 @@ let orders = JSON.parse(localStorage.getItem("orders")) || [];
 let container = document.getElementById("orders");
 
 if(orders.length == 0){
-container.innerHTML = "<p style='padding:10px;'>No orders yet</p>";
+container.innerHTML = "<p>No orders yet</p>";
 }else{
 
 orders.forEach(o=>{
@@ -27,29 +26,25 @@ orders.forEach(o=>{
 let itemsHTML = "";
 
 o.items.forEach(item=>{
-itemsHTML += `
-<div style="display:flex; gap:10px; margin:5px 0;">
-<img src="${item.image}" style="width:50px; height:50px; border-radius:6px;">
-<div>
-<p>${item.name}</p>
-<p>Qty: ${item.quantity}</p>
-</div>
-</div>
-`;
+itemsHTML += `<p>${item.name} (x${item.quantity})</p>`;
 });
 
+let color = "orange";
+
+if(o.status == "Shipped") color = "blue";
+if(o.status == "Delivered") color = "green";
+
 container.innerHTML += `
-<div class="card" style="margin:10px;">
+<div class="card">
 
 <h4>Order ID: ${o.id}</h4>
-<p>Status: <b style="color:orange;">${o.status}</b></p>
+
+<p>Status: <b style="color:${color}">${o.status}</b></p>
+
+${itemsHTML}
 
 <p><b>Name:</b> ${o.name}</p>
 <p><b>Address:</b> ${o.address}</p>
-
-<hr>
-
-${itemsHTML}
 
 </div>
 `;
@@ -59,21 +54,6 @@ ${itemsHTML}
 }
 
 </script>
-
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-
-<a href="index.html">🏠<br>Home</a>
-
-<a href="#">📂<br>Categories</a>
-
-<a href="cart.html">🛒<br>Cart</a>
-
-<a href="orders.html">📦<br>Orders</a>
-
-<a href="profile.html">👤<br>Profile</a>
-
-</div>
 
 </body>
 </html>
