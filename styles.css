@@ -113,3 +113,12 @@ font-size:12px;
 text-decoration:none;
 color:black;
 }
+button{
+width:90%;
+padding:10px;
+margin:10px;
+background:green;
+color:white;
+border:none;
+border-radius:6px;
+}
