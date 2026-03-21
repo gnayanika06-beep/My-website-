@@ -84,21 +84,31 @@ let name = document.getElementById("name").value;
 let price = document.getElementById("price").value;
 let image = document.getElementById("image").value;
 
+if(name=="" || price=="" || image==""){
+alert("Fill all fields");
+return;
+}
+
 products.push({name,price,image});
 
 localStorage.setItem("products",JSON.stringify(products));
 
 showProducts();
 
+// clear input
+document.getElementById("name").value = "";
+document.getElementById("price").value = "";
+document.getElementById("image").value = "";
+
 }
 
 function deleteProduct(i){
 
+if(confirm("Delete product?")){
 products.splice(i,1);
-
 localStorage.setItem("products",JSON.stringify(products));
-
 showProducts();
+}
 
 }
 
@@ -108,7 +118,6 @@ let orders = JSON.parse(localStorage.getItem("orders")) || [];
 function renderOrders(){
 
 let container = document.getElementById("orderList");
-
 container.innerHTML = "";
 
 if(orders.length == 0){
@@ -119,28 +128,33 @@ return;
 orders.forEach((o,index)=>{
 
 let itemsHTML = "";
+let total = 0;
 
 o.items.forEach(item=>{
-itemsHTML += `
-<p>${item.name} (x${item.quantity})</p>
-`;
+itemsHTML += `<p>${item.name} (x${item.quantity})</p>`;
+total += item.price * item.quantity;
 });
 
 container.innerHTML += `
 <div class="card">
 
-<h4>${o.id}</h4>
+<h4>Order ID: ${o.id}</h4>
 <p>Status: <b>${o.status}</b></p>
-<p>${o.name}</p>
-<p>${o.address}</p>
+<p><b>Name:</b> ${o.name}</p>
+<p><b>Address:</b> ${o.address}</p>
 
 ${itemsHTML}
+
+<p><b>Total:</b> ₹${total}</p>
 
 <select onchange="changeStatus(${index}, this.value)">
 <option ${o.status=="Pending"?"selected":""}>Pending</option>
 <option ${o.status=="Shipped"?"selected":""}>Shipped</option>
 <option ${o.status=="Delivered"?"selected":""}>Delivered</option>
 </select>
+
+<br><br>
+
 <button onclick="deleteOrder(${index})">Delete</button>
 
 </div>
@@ -150,17 +164,7 @@ ${itemsHTML}
 
 }
 
-function markDelivered(index){
-
-orders[index].status = "Delivered";
-
-localStorage.setItem("orders", JSON.stringify(orders));
-
-renderOrders();
-
-}
-
-function deleteOrder(index){
+// CHANGE STATUS
 function changeStatus(index, status){
 
 orders[index].status = status;
@@ -170,6 +174,10 @@ localStorage.setItem("orders", JSON.stringify(orders));
 renderOrders();
 
 }
+
+// DELETE ORDER
+function deleteOrder(index){
+
 if(confirm("Delete order?")){
 orders.splice(index,1);
 localStorage.setItem("orders", JSON.stringify(orders));
