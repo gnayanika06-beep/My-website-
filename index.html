@@ -62,20 +62,29 @@ let products = JSON.parse(localStorage.getItem("products")) || [];
 
 let container = document.getElementById("productList");
 
+container.innerHTML = "";
+
+// Show Products
 products.forEach(p => {
 
-container.innerHTML += `
-<div class="card" onclick="openProduct('${p.name}', '${p.price}', '${p.image}')">
+let div = document.createElement("div");
+
+div.className = "card";
+
+div.innerHTML = `
 <img src="${p.image}">
 <h4>${p.name}</h4>
 <p>₹${p.price}</p>
-<button onclick="event.stopPropagation(); addToCart('${p.name}', '${p.price}', '${p.image}')">
+<button onclick="addToCart('${p.name}', '${p.price}', '${p.image}')">
 Add to Cart
 </button>
-</div>
+`;
+
+container.appendChild(div);
 
 });
 
+// Add to Cart
 function addToCart(name, price, image){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -88,8 +97,22 @@ localStorage.setItem("cart", JSON.stringify(cart));
 
 alert("Added to cart");
 
-}
 updateCartCount();
+
+}
+
+// Cart Count
+function updateCartCount(){
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+document.getElementById("cartCount").innerText = cart.length;
+
+}
+
+// Page load এ count দেখাও
+updateCartCount();
+
 </script>
 
 </body>
