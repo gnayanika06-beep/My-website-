@@ -8,14 +8,10 @@
 
 <body>
 
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Shop</title>
-<link rel="stylesheet" href="styles.css">
-</head>
+<!-- Header -->
 <div class="header">
 <h2>MyShop</h2>
-<input type="text" placeholder="Search products...">
+<input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
 </div>
 
 <!-- Banner -->
@@ -56,7 +52,7 @@
 <a href="index.html">🏠<br>Home</a>
 <a href="#">📂<br>Categories</a>
 <a href="cart.html">🛒<br>Cart (<span id="cartCount">0</span>)</a>
-<a href="#">📦<br>Orders</a>
+<a href="orders.html">📦<br>Orders</a>
 <a href="profile.html">👤<br>Profile</a>
 </div>
 
@@ -64,20 +60,26 @@
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-let container = document.getElementById("productList");
+/* Show Products Function */
+function showProducts(list){
 
+let container = document.getElementById("productList");
 container.innerHTML = "";
 
-// Show Products
-products.forEach(p => {
+if(list.length === 0){
+container.innerHTML = "<p style='padding:10px;'>No product found</p>";
+return;
+}
+
+list.forEach(p => {
 
 let div = document.createElement("div");
+
+div.className = "card";
 
 div.onclick = function(){
 window.location.href = `product.html?name=${p.name}&price=${p.price}&image=${p.image}`;
 };
-
-div.className = "card";
 
 div.innerHTML = `
 <img src="${p.image}">
@@ -92,12 +94,26 @@ container.appendChild(div);
 
 });
 
-// Add to Cart
+}
+
+/* Search Function */
+function searchProducts(){
+
+let value = document.getElementById("searchInput").value.toLowerCase();
+
+let filtered = products.filter(p =>
+p.name.toLowerCase().includes(value)
+);
+
+showProducts(filtered);
+
+}
+
+/* Add to Cart */
 function addToCart(name, price, image){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// check existing
 let existing = cart.find(item => item.name === name);
 
 if(existing){
@@ -116,16 +132,20 @@ updateCartCount();
 
 }
 
-// Cart Count
+/* Cart Count */
 function updateCartCount(){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-document.getElementById("cartCount").innerText = cart.length;
+let totalQty = 0;
+cart.forEach(item => totalQty += item.quantity);
+
+document.getElementById("cartCount").innerText = totalQty;
 
 }
 
-// Run on load
+/* Load on Start */
+showProducts(products);
 updateCartCount();
 
 </script>
