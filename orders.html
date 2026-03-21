@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Orders</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<h2>My Orders</h2>
+
+<div id="orders"></div>
+
+<script>
+
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+let container = document.getElementById("orders");
+
+if(orders.length == 0){
+container.innerHTML = "<p>No orders yet</p>";
+}else{
+
+orders.forEach(o=>{
+
+container.innerHTML += `
+<div class="card">
+<h4>Order ID: ${o.id}</h4>
+<p>Status: ${o.status}</p>
+<p>Name: ${o.name}</p>
+<p>Address: ${o.address}</p>
+</div>
+`;
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
