@@ -1,49 +1,16 @@
 body{
 font-family: Arial;
 margin:0;
-padding-bottom:70px;
+padding-bottom:60px;
 background:#f5f5f5;
 }
 
-/* Header */
 .header{
 background:#2874f0;
 color:white;
 padding:10px;
 }
 
-.header input{
-width:100%;
-padding:8px;
-border:none;
-border-radius:5px;
-margin-top:5px;
-}
-
-/* Banner */
-.banner img{
-width:100%;
-border-radius:10px;
-}
-
-/* Categories */
-.categories{
-display:flex;
-justify-content:space-around;
-padding:10px;
-background:white;
-}
-
-.cat{
-text-align:center;
-}
-
-.cat img{
-width:50px;
-height:50px;
-}
-
-/* Products */
 .products{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -55,25 +22,13 @@ padding:10px;
 background:white;
 padding:10px;
 border-radius:10px;
-box-shadow:0 2px 5px rgba(0,0,0,0.1);
 text-align:center;
 }
 
 .card img{
 width:100%;
-border-radius:10px;
 }
 
-.card button{
-background:green;
-color:white;
-border:none;
-padding:8px;
-border-radius:5px;
-margin-top:5px;
-}
-
-/* Bottom Nav */
 .bottom-nav{
 position:fixed;
 bottom:0;
@@ -81,13 +36,5 @@ width:100%;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:10px 0;
-border-top:1px solid #ccc;
-}
-
-.bottom-nav a{
-text-align:center;
-text-decoration:none;
-color:black;
-font-size:14px;
+padding:10px;
 }
