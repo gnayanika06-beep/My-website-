@@ -161,7 +161,15 @@ renderOrders();
 }
 
 function deleteOrder(index){
+function changeStatus(index, status){
 
+orders[index].status = status;
+
+localStorage.setItem("orders", JSON.stringify(orders));
+
+renderOrders();
+
+}
 if(confirm("Delete order?")){
 orders.splice(index,1);
 localStorage.setItem("orders", JSON.stringify(orders));
