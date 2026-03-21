@@ -80,7 +80,20 @@ container.innerHTML += `
 totalEl.textContent = "Total: ₹" + total;
 
 }
+function changeQty(index, change){
 
+cart[index].quantity += change;
+
+// যদি 0 হয়ে যায় → remove
+if(cart[index].quantity <= 0){
+cart.splice(index,1);
+}
+
+localStorage.setItem("cart", JSON.stringify(cart));
+
+renderCart();
+
+}
 /* WhatsApp Order */
 function orderOnWhatsApp(){
 
