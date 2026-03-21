@@ -83,7 +83,7 @@ div.innerHTML = `
 <img src="${p.image}">
 <h4>${p.name}</h4>
 <p>₹${p.price}</p>
-<button onclick="addToCart('${p.name}', '${p.price}', '${p.image}')">
+<button onclick="event.stopPropagation(); addToCart('${p.name}', '${p.price}', '${p.image}')">
 Add to Cart
 </button>
 `;
