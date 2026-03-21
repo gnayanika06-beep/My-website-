@@ -22,25 +22,10 @@
 <!-- Categories -->
 <div class="categories">
 
-<div class="cat">
-<img src="https://cdn-icons-png.flaticon.com/128/892/892458.png">
-<p>Fashion</p>
-</div>
-
-<div class="cat">
-<img src="https://cdn-icons-png.flaticon.com/128/3075/3075977.png">
-<p>Beauty</p>
-</div>
-
-<div class="cat">
-<img src="https://cdn-icons-png.flaticon.com/128/3081/3081559.png">
-<p>Kids</p>
-</div>
-
-<div class="cat">
-<img src="https://cdn-icons-png.flaticon.com/128/1046/1046857.png">
-<p>Kitchen</p>
-</div>
+<div class="cat"><img src="https://cdn-icons-png.flaticon.com/128/892/892458.png"><p>Fashion</p></div>
+<div class="cat"><img src="https://cdn-icons-png.flaticon.com/128/3075/3075977.png"><p>Beauty</p></div>
+<div class="cat"><img src="https://cdn-icons-png.flaticon.com/128/3081/3081559.png"><p>Kids</p></div>
+<div class="cat"><img src="https://cdn-icons-png.flaticon.com/128/1046/1046857.png"><p>Kitchen</p></div>
 
 </div>
 
@@ -60,23 +45,24 @@
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-/* Show Products Function */
+/* SHOW PRODUCTS */
 function showProducts(list){
 
 let container = document.getElementById("productList");
 container.innerHTML = "";
 
+// No product
 if(list.length === 0){
-container.innerHTML = "<p style='padding:10px;'>No product found</p>";
+container.innerHTML = "<p style='text-align:center;'>No products found 😢</p>";
 return;
 }
 
 list.forEach(p => {
 
 let div = document.createElement("div");
-
 div.className = "card";
 
+// Open product page
 div.onclick = function(){
 window.location.href = `product.html?name=${p.name}&price=${p.price}&image=${p.image}`;
 };
@@ -85,6 +71,7 @@ div.innerHTML = `
 <img src="${p.image}">
 <h4>${p.name}</h4>
 <p>₹${p.price}</p>
+
 <button onclick="event.stopPropagation(); addToCart('${p.name}', '${p.price}', '${p.image}')">
 Add to Cart
 </button>
@@ -96,7 +83,7 @@ container.appendChild(div);
 
 }
 
-/* Search Function */
+/* SEARCH */
 function searchProducts(){
 
 let value = document.getElementById("searchInput").value.toLowerCase();
@@ -109,7 +96,7 @@ showProducts(filtered);
 
 }
 
-/* Add to Cart */
+/* ADD TO CART */
 function addToCart(name, price, image){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -132,19 +119,20 @@ updateCartCount();
 
 }
 
-/* Cart Count */
+/* CART COUNT */
 function updateCartCount(){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 let totalQty = 0;
+
 cart.forEach(item => totalQty += item.quantity);
 
 document.getElementById("cartCount").innerText = totalQty;
 
 }
 
-/* Load on Start */
+/* AUTO LOAD */
 showProducts(products);
 updateCartCount();
 
