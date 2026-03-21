@@ -136,7 +136,11 @@ container.innerHTML += `
 
 ${itemsHTML}
 
-<button onclick="markDelivered(${index})">Delivered</button>
+<select onchange="changeStatus(${index}, this.value)">
+<option ${o.status=="Pending"?"selected":""}>Pending</option>
+<option ${o.status=="Shipped"?"selected":""}>Shipped</option>
+<option ${o.status=="Delivered"?"selected":""}>Delivered</option>
+</select>
 <button onclick="deleteOrder(${index})">Delete</button>
 
 </div>
