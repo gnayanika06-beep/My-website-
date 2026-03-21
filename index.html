@@ -97,9 +97,16 @@ function addToCart(name, price, image){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+// check existing
+let existing = cart.find(item => item.name === name);
+
+if(existing){
+existing.quantity += 1;
+}else{
 cart.push({
 name, price, image, quantity:1
 });
+}
 
 localStorage.setItem("cart", JSON.stringify(cart));
 
