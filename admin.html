@@ -3,11 +3,12 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<!-- Login Box -->
+<!-- Login -->
 <div id="loginBox">
 <h3>Admin Login</h3>
 <input type="password" id="adminPass" placeholder="Enter Password">
@@ -19,39 +20,44 @@
 
 <h2>Admin Panel</h2>
 
+<!-- Add Product -->
 <h3>Add Product</h3>
 
-<input type="text" id="name" placeholder="Product Name">
-<br><br>
-
-<input type="number" id="price" placeholder="Price">
-<br><br>
-
-<input type="text" id="image" placeholder="Image URL">
-<br><br>
+<input type="text" id="name" placeholder="Product Name"><br><br>
+<input type="number" id="price" placeholder="Price"><br><br>
+<input type="text" id="image" placeholder="Image URL"><br><br>
 
 <button onclick="addProduct()">Add Product</button>
 
-<h3>Product List</h3>
+<!-- Product List -->
+<h3>Products</h3>
 <div id="productList"></div>
+
+<hr>
+
+<!-- Orders -->
+<h3>Orders</h3>
+<div id="orderList"></div>
 
 </div>
 
 <script>
 
+// LOGIN
 function login(){
-
 let pass = document.getElementById("adminPass").value.trim();
 
 if(pass == "1234"){
 document.getElementById("loginBox").style.display = "none";
 document.getElementById("adminPanel").style.display = "block";
+showProducts();
+renderOrders();
 }else{
 alert("Wrong Password");
 }
-
 }
 
+// PRODUCTS
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
 function showProducts(){
@@ -62,7 +68,7 @@ list.innerHTML = "";
 products.forEach((p,i)=>{
 
 list.innerHTML += `
-<div>
+<div class="card">
 ${p.name} - ₹${p.price}
 <button onclick="deleteProduct(${i})">Delete</button>
 </div>
@@ -96,7 +102,69 @@ showProducts();
 
 }
 
-showProducts();
+// ORDERS
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+function renderOrders(){
+
+let container = document.getElementById("orderList");
+
+container.innerHTML = "";
+
+if(orders.length == 0){
+container.innerHTML = "<p>No orders</p>";
+return;
+}
+
+orders.forEach((o,index)=>{
+
+let itemsHTML = "";
+
+o.items.forEach(item=>{
+itemsHTML += `
+<p>${item.name} (x${item.quantity})</p>
+`;
+});
+
+container.innerHTML += `
+<div class="card">
+
+<h4>${o.id}</h4>
+<p>Status: <b>${o.status}</b></p>
+<p>${o.name}</p>
+<p>${o.address}</p>
+
+${itemsHTML}
+
+<button onclick="markDelivered(${index})">Delivered</button>
+<button onclick="deleteOrder(${index})">Delete</button>
+
+</div>
+`;
+
+});
+
+}
+
+function markDelivered(index){
+
+orders[index].status = "Delivered";
+
+localStorage.setItem("orders", JSON.stringify(orders));
+
+renderOrders();
+
+}
+
+function deleteOrder(index){
+
+if(confirm("Delete order?")){
+orders.splice(index,1);
+localStorage.setItem("orders", JSON.stringify(orders));
+renderOrders();
+}
+
+}
 
 </script>
 
