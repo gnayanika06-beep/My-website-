@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Cart</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -17,9 +18,10 @@
 
 <div id="cart-items"></div>
 
-<h2 id="cart-total">Total: ₹0</h2>
+<!-- Total (Sticky) -->
+<h2 id="cart-total" class="cart-total">Total: ₹0</h2>
 
-<br>
+<br><br><br>
 
 <input type="text" id="customerName" placeholder="Your Name">
 
@@ -46,6 +48,20 @@ localStorage.setItem("cart",JSON.stringify(cart));
 renderCart();
 }
 
+/* Quantity Change */
+function changeQty(index, change){
+
+cart[index].quantity += change;
+
+if(cart[index].quantity <= 0){
+cart.splice(index,1);
+}
+
+localStorage.setItem("cart", JSON.stringify(cart));
+renderCart();
+
+}
+
 /* Show Cart */
 function renderCart(){
 
@@ -61,7 +77,11 @@ cart.forEach((item,i)=>{
 total += item.price * item.quantity;
 
 container.innerHTML += `
-<div class="card">
+<div class="card" style="display:flex; gap:10px; align-items:center;">
+
+<img src="${item.image}" style="width:80px; height:80px; border-radius:8px;">
+
+<div style="flex:1;">
 <p>${item.name}</p>
 <p>₹${item.price}</p>
 
@@ -70,8 +90,10 @@ container.innerHTML += `
 <span>${item.quantity}</span>
 <button onclick="changeQty(${i}, 1)">+</button>
 </div>
+</div>
 
-<button onclick="removeItem(${i})">Remove</button>
+<button onclick="removeItem(${i})">❌</button>
+
 </div>
 `;
 
@@ -80,20 +102,7 @@ container.innerHTML += `
 totalEl.textContent = "Total: ₹" + total;
 
 }
-function changeQty(index, change){
 
-cart[index].quantity += change;
-
-// যদি 0 হয়ে যায় → remove
-if(cart[index].quantity <= 0){
-cart.splice(index,1);
-}
-
-localStorage.setItem("cart", JSON.stringify(cart));
-
-renderCart();
-
-}
 /* WhatsApp Order */
 function orderOnWhatsApp(){
 
