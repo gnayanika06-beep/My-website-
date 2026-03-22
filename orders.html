@@ -16,7 +16,19 @@
 <div id="orders" style="padding:10px;"></div>
 
 <script>
+function showToast(message){
 
+let toast = document.getElementById("toast");
+
+toast.innerText = message;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+toast.classList.remove("show");
+}, 2000);
+
+}
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
 let container = document.getElementById("orders");
