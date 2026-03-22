@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Success</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body style="text-align:center; padding:20px;">
+
+<h1 style="color:green;">✅ Payment Successful</h1>
+
+<h3 id="orderID"></h3>
+
+<p>Your order has been placed successfully 🎉</p>
+
+<br>
+
+<a href="index.html">
+<button>🏠 Go Home</button>
+</a>
+
+<script>
+
+let params = new URLSearchParams(window.location.search);
+let id = params.get("id");
+
+document.getElementById("orderID").innerText = "Order ID: " + id;
+
+</script>
+
+</body>
+</html>
