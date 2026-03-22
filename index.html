@@ -21,27 +21,11 @@
 
 <!-- Categories -->
 <div class="categories">
-
-<div class="cat" onclick="selectCategory('All')">
-<p>All</p>
-</div>
-
-<div class="cat" onclick="selectCategory('Fashion')">
-<p>Fashion</p>
-</div>
-
-<div class="cat" onclick="selectCategory('Beauty')">
-<p>Beauty</p>
-</div>
-
-<div class="cat" onclick="selectCategory('Kids')">
-<p>Kids</p>
-</div>
-
-<div class="cat" onclick="selectCategory('Kitchen')">
-<p>Kitchen</p>
-</div>
-
+<div class="cat" onclick="selectCategory('All')"><p>All</p></div>
+<div class="cat" onclick="selectCategory('Fashion')"><p>Fashion</p></div>
+<div class="cat" onclick="selectCategory('Beauty')"><p>Beauty</p></div>
+<div class="cat" onclick="selectCategory('Kids')"><p>Kids</p></div>
+<div class="cat" onclick="selectCategory('Kitchen')"><p>Kitchen</p></div>
 </div>
 
 <!-- Products -->
@@ -72,15 +56,23 @@ container.innerHTML = "<p style='text-align:center;'>No products found 😢</p>"
 return;
 }
 
+let ratings = JSON.parse(localStorage.getItem("ratings")) || {};
+
 list.forEach(p => {
 
 let div = document.createElement("div");
 div.className = "card";
 
-/* Open Product Page */
+/* Open Product */
 div.onclick = function(){
 window.location.href = `product.html?name=${p.name}&price=${p.price}&image=${p.image}`;
 };
+
+/* Rating */
+let avg = ratings[p.name]?.avg || 0;
+
+/* Discount (fake demo) */
+let discountPrice = Math.floor(p.price * 0.8); // 20% off
 
 div.innerHTML = `
 
@@ -90,16 +82,29 @@ div.innerHTML = `
 
 <!-- ❤️ Wishlist -->
 <span onclick="event.stopPropagation(); toggleWishlist('${p.name}','${p.price}','${p.image}')" 
-style="position:absolute; top:5px; right:10px; font-size:20px; cursor:pointer;">
+style="position:absolute; top:5px; right:10px; font-size:20px;">
 ❤️
+</span>
+
+<!-- 💸 Discount -->
+<span style="position:absolute; bottom:5px; left:5px; background:red; color:white; padding:2px 6px; font-size:12px;">
+20% OFF
 </span>
 
 </div>
 
 <h4>${p.name}</h4>
-<p>₹${p.price}</p>
 
-<button onclick="event.stopPropagation(); addToCart('${p.name}', '${p.price}', '${p.image}')">
+<p>
+<span style="text-decoration:line-through; color:gray;">₹${p.price}</span>
+<span style="color:green; font-weight:bold;"> ₹${discountPrice}</span>
+</p>
+
+<p style="color:orange;">
+${"⭐".repeat(Math.round(avg))} (${avg.toFixed(1)})
+</p>
+
+<button onclick="event.stopPropagation(); addToCart('${p.name}', '${discountPrice}', '${p.image}')">
 Add to Cart
 </button>
 
@@ -111,13 +116,13 @@ container.appendChild(div);
 
 }
 
-/* CATEGORY SELECT */
+/* CATEGORY */
 function selectCategory(cat){
 selectedCategory = cat;
 filterProducts();
 }
 
-/* SEARCH + CATEGORY FILTER */
+/* FILTER */
 function filterProducts(){
 
 let searchValue = document.getElementById("searchInput").value.toLowerCase();
@@ -125,7 +130,6 @@ let searchValue = document.getElementById("searchInput").value.toLowerCase();
 let filtered = products.filter(p => {
 
 let matchSearch = p.name.toLowerCase().includes(searchValue);
-
 let matchCategory = (selectedCategory === "All" || p.category === selectedCategory);
 
 return matchSearch && matchCategory;
@@ -146,9 +150,7 @@ let existing = cart.find(item => item.name === name);
 if(existing){
 existing.quantity += 1;
 }else{
-cart.push({
-name, price, image, quantity:1
-});
+cart.push({name, price, image, quantity:1});
 }
 
 localStorage.setItem("cart", JSON.stringify(cart));
@@ -159,7 +161,7 @@ updateCartCount();
 
 }
 
-/* ❤️ WISHLIST */
+/* ❤️ WISHLIST FIXED */
 function toggleWishlist(name, price, image){
 
 let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -174,7 +176,7 @@ wishlist.push({name, price, image});
 alert("Added to wishlist ❤️");
 }
 
-localStorage.setItem("wishlist", JSON.stringify(wishlist);
+localStorage.setItem("wishlist", JSON.stringify(wishlist)); // FIXED
 
 }
 
