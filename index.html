@@ -7,13 +7,14 @@
 </head>
 
 <body>
+
+<!-- 🔔 Toast -->
 <div id="toast"></div>
+
 <!-- Header -->
 <div class="header">
 <h2>🛍 MyShop</h2>
-
 <button onclick="logout()" style="float:right;">Logout</button>
-
 <input type="text" id="searchInput" placeholder="Search products..." onkeyup="filterProducts()">
 </div>
 
@@ -44,35 +45,33 @@
 </div>
 
 <script>
+
+/* 🔔 TOAST */
 function showToast(message){
-
 let toast = document.getElementById("toast");
-
 toast.innerText = message;
-
 toast.classList.add("show");
 
 setTimeout(()=>{
 toast.classList.remove("show");
-}, 2000);
-
+},2000);
 }
-// 🔐 LOGIN CHECK
-let currentUser = localStorage.getItem("currentUser");
 
+/* 🔐 LOGIN CHECK */
+let currentUser = localStorage.getItem("currentUser");
 if(!currentUser){
 window.location.href = "login.html";
 }
 
-// 🧠 USER-WISE KEYS
+/* USER KEYS */
 let cartKey = "cart_" + currentUser;
 let wishlistKey = "wishlist_" + currentUser;
 
-// DATA
+/* DATA */
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let selectedCategory = "All";
 
-// SHOW PRODUCTS
+/* SHOW PRODUCTS */
 function showProducts(list){
 
 let container = document.getElementById("productList");
@@ -90,29 +89,32 @@ list.forEach(p => {
 let div = document.createElement("div");
 div.className = "card";
 
-// OPEN PRODUCT PAGE
+/* OPEN PRODUCT */
 div.onclick = function(){
 window.location.href = `product.html?name=${p.name}&price=${p.price}&image=${p.image}`;
 };
 
-// RATING
+/* RATING */
 let avg = ratings[p.name]?.avg || 0;
 
-// DISCOUNT
+/* DISCOUNT */
 let discountPrice = Math.floor(p.price * 0.8);
 
+/* CHECK WISHLIST ❤️ */
+let wishlist = JSON.parse(localStorage.getItem(wishlistKey)) || [];
+let isWish = wishlist.find(item => item.name === p.name);
+
+/* UI */
 div.innerHTML = `
 <div style="position:relative;">
 
 <img src="${p.image}">
 
-<!-- ❤️ Wishlist -->
 <span onclick="event.stopPropagation(); toggleWishlist('${p.name}','${p.price}','${p.image}')" 
 style="position:absolute; top:5px; right:10px; font-size:20px;">
-❤️
+${isWish ? "❤️" : "🤍"}
 </span>
 
-<!-- Discount -->
 <span style="position:absolute; bottom:5px; left:5px; background:red; color:white; padding:2px 6px; font-size:12px;">
 20% OFF
 </span>
@@ -140,30 +142,27 @@ container.appendChild(div);
 });
 }
 
-// CATEGORY
+/* CATEGORY */
 function selectCategory(cat){
 selectedCategory = cat;
 filterProducts();
 }
 
-// FILTER (Search + Category)
+/* FILTER */
 function filterProducts(){
 
 let searchValue = document.getElementById("searchInput").value.toLowerCase();
 
 let filtered = products.filter(p => {
-
 let matchSearch = p.name.toLowerCase().includes(searchValue);
 let matchCategory = (selectedCategory === "All" || p.category === selectedCategory);
-
 return matchSearch && matchCategory;
-
 });
 
 showProducts(filtered);
 }
 
-// ADD TO CART (USER-WISE)
+/* ADD TO CART */
 function addToCart(name, price, image){
 
 let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
@@ -178,12 +177,12 @@ cart.push({name, price, image, quantity:1});
 
 localStorage.setItem(cartKey, JSON.stringify(cart));
 
-alert("Added to cart");
+showToast("Added to cart 🛒");
 
 updateCartCount();
 }
 
-// ❤️ WISHLIST (USER-WISE)
+/* ❤️ WISHLIST */
 function toggleWishlist(name, price, image){
 
 let wishlist = JSON.parse(localStorage.getItem(wishlistKey)) || [];
@@ -192,16 +191,18 @@ let existing = wishlist.find(item => item.name === name);
 
 if(existing){
 wishlist = wishlist.filter(item => item.name !== name);
-alert("Removed from wishlist");
+showToast("Removed from wishlist ❌");
 }else{
 wishlist.push({name, price, image});
-alert("Added to wishlist ❤️");
+showToast("Added to wishlist ❤️");
 }
 
 localStorage.setItem(wishlistKey, JSON.stringify(wishlist));
+
+filterProducts(); // refresh UI
 }
 
-// CART COUNT
+/* CART COUNT */
 function updateCartCount(){
 
 let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
@@ -212,13 +213,13 @@ cart.forEach(item => totalQty += item.quantity);
 document.getElementById("cartCount").innerText = totalQty;
 }
 
-// LOGOUT
+/* LOGOUT */
 function logout(){
 localStorage.removeItem("currentUser");
 window.location.href = "login.html";
 }
 
-// LOAD
+/* LOAD */
 showProducts(products);
 updateCartCount();
 
