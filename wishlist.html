@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishlist</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<h2 style="text-align:center;">❤️ My Wishlist</h2>
+
+<div id="wishlistItems" class="products"></div>
+
+<script>
+
+let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+let container = document.getElementById("wishlistItems");
+
+if(wishlist.length === 0){
+container.innerHTML = "<p style='text-align:center;'>No items in wishlist 😢</p>";
+}else{
+
+wishlist.forEach((item,i)=>{
+
+container.innerHTML += `
+<div class="card">
+
+<img src="${item.image}">
+<h4>${item.name}</h4>
+<p>₹${item.price}</p>
+
+<button onclick="removeItem(${i})">Remove</button>
+
+</div>
+`;
+
+});
+
+}
+
+function removeItem(index){
+
+wishlist.splice(index,1);
+
+localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+</html>
