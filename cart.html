@@ -8,7 +8,10 @@
 </head>
 
 <body>
+
+<!-- 🔔 Toast -->
 <div id="toast"></div>
+
 <header class="header">
 <h2>🛒 Your Cart</h2>
 <a href="index.html" style="color:white;">⬅ Back</a>
@@ -20,7 +23,7 @@
 
 <h2 id="cart-total" class="cart-total">Total: ₹0</h2>
 
-<br><br><br>
+<br><br>
 
 <input type="text" id="customerName" placeholder="Your Name">
 <br><br>
@@ -34,52 +37,51 @@
 </main>
 
 <script>
+
+/* 🔔 TOAST */
 function showToast(message){
-
 let toast = document.getElementById("toast");
-
 toast.innerText = message;
-
 toast.classList.add("show");
-
-setTimeout(()=>{
-toast.classList.remove("show");
-}, 2000);
-
+setTimeout(()=> toast.classList.remove("show"), 2000);
 }
-// 🔐 USER
+
+/* 🔐 USER CHECK */
 let currentUser = localStorage.getItem("currentUser");
 
 if(!currentUser){
 window.location.href = "login.html";
 }
 
-// 🧠 USER KEYS
+/* 🧠 USER KEYS */
 let cartKey = "cart_" + currentUser;
-let ordersKey = "orders_" + currentUser;
-
 let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
-/* REMOVE */
+/* ❌ REMOVE ITEM */
 function removeItem(index){
 cart.splice(index,1);
 localStorage.setItem(cartKey,JSON.stringify(cart));
+showToast("Item removed ❌");
 renderCart();
 }
 
-/* QTY */
+/* ➕➖ QUANTITY */
 function changeQty(index, change){
+
 cart[index].quantity += change;
 
 if(cart[index].quantity <= 0){
 cart.splice(index,1);
+showToast("Item removed ❌");
+}else{
+showToast("Updated ✔");
 }
 
 localStorage.setItem(cartKey, JSON.stringify(cart));
 renderCart();
 }
 
-/* SHOW CART */
+/* 🛒 RENDER CART */
 function renderCart(){
 
 let container = document.getElementById("cart-items");
@@ -97,7 +99,10 @@ let total = 0;
 
 cart.forEach((item,i)=>{
 
-total += item.price * item.quantity;
+let price = Number(item.price) || 0;
+let qty = Number(item.quantity) || 0;
+
+total += price * qty;
 
 container.innerHTML += `
 <div class="card" style="display:flex; gap:12px; align-items:center;">
@@ -106,11 +111,11 @@ container.innerHTML += `
 
 <div style="flex:1;">
 <p style="font-weight:bold;">${item.name}</p>
-<p style="color:green;">₹${item.price}</p>
+<p style="color:green;">₹${price}</p>
 
-<div>
+<div style="margin-top:5px;">
 <button onclick="changeQty(${i}, -1)">➖</button>
-<span>${item.quantity}</span>
+<span style="margin:0 10px;">${qty}</span>
 <button onclick="changeQty(${i}, 1)">➕</button>
 </div>
 
@@ -126,48 +131,49 @@ container.innerHTML += `
 totalEl.textContent = "Total: ₹" + total;
 }
 
-/* 💳 GO TO PAYMENT */
+/* 💳 PAYMENT */
 function goToPayment(){
 
 if(cart.length == 0){
-alert("Cart is empty");
+showToast("Cart is empty ❌");
 return;
 }
 
-let name = document.getElementById("customerName").value;
-let address = document.getElementById("customerAddress").value;
+let name = document.getElementById("customerName").value.trim();
+let address = document.getElementById("customerAddress").value.trim();
 
-if(name == "" || address == ""){
-alert("Enter name & address");
+if(name === "" || address === ""){
+showToast("Enter name & address ⚠️");
 return;
 }
 
-// save temp order
+/* SAVE TEMP ORDER */
 localStorage.setItem("tempOrder", JSON.stringify({
-name, address, cart
+name,
+address,
+cart
 }));
 
 window.location.href = "payment.html";
-
 }
 
-/* 📲 WHATSAPP */
+/* 📲 WHATSAPP ORDER */
 function orderOnWhatsApp(){
 
 if(cart.length == 0){
-alert("Cart is empty");
+showToast("Cart is empty ❌");
 return;
 }
 
-let name = document.getElementById("customerName").value;
-let address = document.getElementById("customerAddress").value;
+let name = document.getElementById("customerName").value.trim();
+let address = document.getElementById("customerAddress").value.trim();
 
-if(name == "" || address == ""){
-alert("Enter name & address");
+if(name === "" || address === ""){
+showToast("Enter name & address ⚠️");
 return;
 }
 
-let phone = "91XXXXXXXXXX";
+let phone = "91XXXXXXXXXX"; // 👉 নিজের নম্বর বসাও
 
 let message = "New Order%0A%0A";
 message += "Name: " + name + "%0A";
@@ -183,7 +189,6 @@ total += item.price * item.quantity;
 message += "%0ATotal: ₹" + total;
 
 window.open("https://wa.me/" + phone + "?text=" + message);
-
 }
 
 /* LOAD */
