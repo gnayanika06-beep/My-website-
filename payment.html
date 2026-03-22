@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="header">
+<h2>💳 Payment</h2>
+</div>
+
+<main style="padding:15px; text-align:center;">
+
+<h3>Choose Payment Method</h3>
+
+<br>
+
+<button onclick="payNow()">💰 Cash on Delivery</button>
+
+<br><br>
+
+<button onclick="payNow()">📱 UPI Payment</button>
+
+<br><br>
+
+<button onclick="payNow()">💳 Card Payment</button>
+
+<br><br><br>
+
+<div id="loading" style="display:none;">
+<p>Processing Payment...</p>
+</div>
+
+</main>
+
+<script>
+
+// 🔐 USER
+let currentUser = localStorage.getItem("currentUser");
+
+if(!currentUser){
+window.location.href = "login.html";
+}
+
+// USER KEYS
+let ordersKey = "orders_" + currentUser;
+let cartKey = "cart_" + currentUser;
+
+// GET TEMP ORDER
+let temp = JSON.parse(localStorage.getItem("tempOrder"));
+
+if(!temp){
+alert("No order found");
+window.location.href = "cart.html";
+}
+
+// 💳 PAY
+function payNow(){
+
+document.getElementById("loading").style.display = "block";
+
+setTimeout(()=>{
+
+// SAVE ORDER
+let orders = JSON.parse(localStorage.getItem(ordersKey)) || [];
+
+let orderID = "ORD" + Math.floor(Math.random()*100000);
+
+orders.push({
+id: orderID,
+items: temp.cart,
+name: temp.name,
+address: temp.address,
+status: "Pending"
+});
+
+localStorage.setItem(ordersKey, JSON.stringify(orders));
+
+// CLEAR CART
+localStorage.removeItem(cartKey);
+localStorage.removeItem("tempOrder");
+
+// SUCCESS PAGE
+window.location.href = "success.html?id=" + orderID;
+
+}, 2000);
+
+}
+
+</script>
+
+</body>
+</html>
