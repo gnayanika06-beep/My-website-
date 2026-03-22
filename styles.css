@@ -138,3 +138,22 @@ text-decoration:none;
 .bottom-nav a:hover{
 color:#2874f0;
 }
+#toast{
+position:fixed;
+bottom:80px;
+left:50%;
+transform:translateX(-50%);
+background:#333;
+color:white;
+padding:10px 20px;
+border-radius:20px;
+opacity:0;
+transition:0.4s;
+z-index:999;
+font-size:14px;
+}
+
+#toast.show{
+opacity:1;
+bottom:100px;
+}
