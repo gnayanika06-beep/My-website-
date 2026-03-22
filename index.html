@@ -11,6 +11,10 @@
 <!-- Header -->
 <div class="header">
 <h2>🛍 MyShop</h2>
+
+<!-- 🔐 Logout Button -->
+<button onclick="logout()" style="float:right; padding:5px 10px;">Logout</button>
+
 <input type="text" id="searchInput" placeholder="Search products..." onkeyup="filterProducts()">
 </div>
 
@@ -42,6 +46,14 @@
 
 <script>
 
+<!-- 🔐 LOGIN CHECK -->
+let currentUser = localStorage.getItem("currentUser");
+
+if(!currentUser){
+window.location.href = "login.html";
+}
+
+/* DATA */
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let selectedCategory = "All";
 
@@ -71,8 +83,8 @@ window.location.href = `product.html?name=${p.name}&price=${p.price}&image=${p.i
 /* Rating */
 let avg = ratings[p.name]?.avg || 0;
 
-/* Discount (fake demo) */
-let discountPrice = Math.floor(p.price * 0.8); // 20% off
+/* Discount */
+let discountPrice = Math.floor(p.price * 0.8);
 
 div.innerHTML = `
 
@@ -82,7 +94,7 @@ div.innerHTML = `
 
 <!-- ❤️ Wishlist -->
 <span onclick="event.stopPropagation(); toggleWishlist('${p.name}','${p.price}','${p.image}')" 
-style="position:absolute; top:5px; right:10px; font-size:20px;">
+style="position:absolute; top:5px; right:10px; font-size:20px; cursor:pointer;">
 ❤️
 </span>
 
@@ -161,7 +173,7 @@ updateCartCount();
 
 }
 
-/* ❤️ WISHLIST FIXED */
+/* ❤️ WISHLIST */
 function toggleWishlist(name, price, image){
 
 let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -176,7 +188,7 @@ wishlist.push({name, price, image});
 alert("Added to wishlist ❤️");
 }
 
-localStorage.setItem("wishlist", JSON.stringify(wishlist)); // FIXED
+localStorage.setItem("wishlist", JSON.stringify(wishlist));
 
 }
 
@@ -190,6 +202,12 @@ cart.forEach(item => totalQty += item.quantity);
 
 document.getElementById("cartCount").innerText = totalQty;
 
+}
+
+/* 🔓 LOGOUT */
+function logout(){
+localStorage.removeItem("currentUser");
+window.location.href = "login.html";
 }
 
 /* LOAD */
