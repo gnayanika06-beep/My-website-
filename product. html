@@ -39,7 +39,19 @@
 <p id="ratingMsg" style="text-align:center;"></p>
 
 <script>
+function showToast(message){
 
+let toast = document.getElementById("toast");
+
+toast.innerText = message;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+toast.classList.remove("show");
+}, 2000);
+
+}
 // GET DATA
 let urlParams = new URLSearchParams(window.location.search);
 
