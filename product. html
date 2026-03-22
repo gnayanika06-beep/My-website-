@@ -7,7 +7,7 @@
 </head>
 
 <body>
-
+<div id="toast"></div>
 <div class="header">
 <h2>🛍 Product Details</h2>
 <a href="index.html" style="color:white;">⬅ Back</a>
