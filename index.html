@@ -12,8 +12,7 @@
 <div class="header">
 <h2>🛍 MyShop</h2>
 
-<!-- 🔐 Logout Button -->
-<button onclick="logout()" style="float:right; padding:5px 10px;">Logout</button>
+<button onclick="logout()" style="float:right;">Logout</button>
 
 <input type="text" id="searchInput" placeholder="Search products..." onkeyup="filterProducts()">
 </div>
@@ -46,18 +45,22 @@
 
 <script>
 
-<!-- 🔐 LOGIN CHECK -->
+// 🔐 LOGIN CHECK
 let currentUser = localStorage.getItem("currentUser");
 
 if(!currentUser){
 window.location.href = "login.html";
 }
 
-/* DATA */
+// 🧠 USER-WISE KEYS
+let cartKey = "cart_" + currentUser;
+let wishlistKey = "wishlist_" + currentUser;
+
+// DATA
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let selectedCategory = "All";
 
-/* SHOW PRODUCTS */
+// SHOW PRODUCTS
 function showProducts(list){
 
 let container = document.getElementById("productList");
@@ -75,30 +78,29 @@ list.forEach(p => {
 let div = document.createElement("div");
 div.className = "card";
 
-/* Open Product */
+// OPEN PRODUCT PAGE
 div.onclick = function(){
 window.location.href = `product.html?name=${p.name}&price=${p.price}&image=${p.image}`;
 };
 
-/* Rating */
+// RATING
 let avg = ratings[p.name]?.avg || 0;
 
-/* Discount */
+// DISCOUNT
 let discountPrice = Math.floor(p.price * 0.8);
 
 div.innerHTML = `
-
 <div style="position:relative;">
 
 <img src="${p.image}">
 
 <!-- ❤️ Wishlist -->
 <span onclick="event.stopPropagation(); toggleWishlist('${p.name}','${p.price}','${p.image}')" 
-style="position:absolute; top:5px; right:10px; font-size:20px; cursor:pointer;">
+style="position:absolute; top:5px; right:10px; font-size:20px;">
 ❤️
 </span>
 
-<!-- 💸 Discount -->
+<!-- Discount -->
 <span style="position:absolute; bottom:5px; left:5px; background:red; color:white; padding:2px 6px; font-size:12px;">
 20% OFF
 </span>
@@ -119,22 +121,20 @@ ${"⭐".repeat(Math.round(avg))} (${avg.toFixed(1)})
 <button onclick="event.stopPropagation(); addToCart('${p.name}', '${discountPrice}', '${p.image}')">
 Add to Cart
 </button>
-
 `;
 
 container.appendChild(div);
 
 });
-
 }
 
-/* CATEGORY */
+// CATEGORY
 function selectCategory(cat){
 selectedCategory = cat;
 filterProducts();
 }
 
-/* FILTER */
+// FILTER (Search + Category)
 function filterProducts(){
 
 let searchValue = document.getElementById("searchInput").value.toLowerCase();
@@ -149,13 +149,12 @@ return matchSearch && matchCategory;
 });
 
 showProducts(filtered);
-
 }
 
-/* ADD TO CART */
+// ADD TO CART (USER-WISE)
 function addToCart(name, price, image){
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
 let existing = cart.find(item => item.name === name);
 
@@ -165,18 +164,17 @@ existing.quantity += 1;
 cart.push({name, price, image, quantity:1});
 }
 
-localStorage.setItem("cart", JSON.stringify(cart));
+localStorage.setItem(cartKey, JSON.stringify(cart));
 
 alert("Added to cart");
 
 updateCartCount();
-
 }
 
-/* ❤️ WISHLIST */
+// ❤️ WISHLIST (USER-WISE)
 function toggleWishlist(name, price, image){
 
-let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+let wishlist = JSON.parse(localStorage.getItem(wishlistKey)) || [];
 
 let existing = wishlist.find(item => item.name === name);
 
@@ -188,29 +186,27 @@ wishlist.push({name, price, image});
 alert("Added to wishlist ❤️");
 }
 
-localStorage.setItem("wishlist", JSON.stringify(wishlist));
-
+localStorage.setItem(wishlistKey, JSON.stringify(wishlist));
 }
 
-/* CART COUNT */
+// CART COUNT
 function updateCartCount(){
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
 let totalQty = 0;
 cart.forEach(item => totalQty += item.quantity);
 
 document.getElementById("cartCount").innerText = totalQty;
-
 }
 
-/* 🔓 LOGOUT */
+// LOGOUT
 function logout(){
 localStorage.removeItem("currentUser");
 window.location.href = "login.html";
 }
 
-/* LOAD */
+// LOAD
 showProducts(products);
 updateCartCount();
 
