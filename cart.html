@@ -9,20 +9,21 @@
 
 <body>
 
-<header>
-<h1>Your Cart</h1>
-<a href="index.html">Home</a>
+<header class="header">
+<h2>🛒 Your Cart</h2>
+<a href="index.html" style="color:white;">⬅ Back</a>
 </header>
 
-<main>
+<main style="padding:10px;">
 
 <div id="cart-items"></div>
 
-<!-- Total (Sticky) -->
+<!-- Total -->
 <h2 id="cart-total" class="cart-total">Total: ₹0</h2>
 
 <br><br><br>
 
+<!-- User Info -->
 <input type="text" id="customerName" placeholder="Your Name">
 
 <br><br>
@@ -31,9 +32,9 @@
 
 <br><br>
 
-<button onclick="orderOnWhatsApp()">Order on WhatsApp</button>
+<button onclick="orderOnWhatsApp()">📲 Order on WhatsApp</button>
 
-<button onclick="placeOrder()">Place Order</button>
+<button onclick="placeOrder()">✅ Place Order</button>
 
 </main>
 
@@ -41,14 +42,14 @@
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-/* Remove Item */
+/* REMOVE ITEM */
 function removeItem(index){
 cart.splice(index,1);
 localStorage.setItem("cart",JSON.stringify(cart));
 renderCart();
 }
 
-/* Quantity Change */
+/* QUANTITY CHANGE */
 function changeQty(index, change){
 
 cart[index].quantity += change;
@@ -62,13 +63,19 @@ renderCart();
 
 }
 
-/* Show Cart */
+/* SHOW CART */
 function renderCart(){
 
 let container = document.getElementById("cart-items");
 let totalEl = document.getElementById("cart-total");
 
 container.innerHTML = "";
+
+if(cart.length === 0){
+container.innerHTML = "<p style='text-align:center;'>🛒 Your cart is empty</p>";
+totalEl.textContent = "Total: ₹0";
+return;
+}
 
 let total = 0;
 
@@ -77,22 +84,23 @@ cart.forEach((item,i)=>{
 total += item.price * item.quantity;
 
 container.innerHTML += `
-<div class="card" style="display:flex; gap:10px; align-items:center;">
+<div class="card" style="display:flex; gap:12px; align-items:center;">
 
-<img src="${item.image}" style="width:80px; height:80px; border-radius:8px;">
+<img src="${item.image}" style="width:90px; height:90px; border-radius:10px;">
 
 <div style="flex:1;">
-<p>${item.name}</p>
-<p>₹${item.price}</p>
+<p style="font-weight:bold;">${item.name}</p>
+<p style="color:green;">₹${item.price}</p>
 
-<div>
-<button onclick="changeQty(${i}, -1)">−</button>
-<span>${item.quantity}</span>
-<button onclick="changeQty(${i}, 1)">+</button>
-</div>
+<div style="margin-top:5px;">
+<button onclick="changeQty(${i}, -1)">➖</button>
+<span style="margin:0 10px;">${item.quantity}</span>
+<button onclick="changeQty(${i}, 1)">➕</button>
 </div>
 
-<button onclick="removeItem(${i})">❌</button>
+</div>
+
+<button onclick="removeItem(${i})" style="background:red;">❌</button>
 
 </div>
 `;
@@ -103,7 +111,7 @@ totalEl.textContent = "Total: ₹" + total;
 
 }
 
-/* WhatsApp Order */
+/* WHATSAPP ORDER */
 function orderOnWhatsApp(){
 
 if(cart.length == 0){
@@ -119,7 +127,7 @@ alert("Please enter your name and address");
 return;
 }
 
-let phone = "919876543210"; // 👉 নিজের নম্বর বসাও
+let phone = "91XXXXXXXXXX"; // 👉 নিজের নম্বর বসাও
 
 let message = "New Order%0A%0A";
 message += "Name: " + name + "%0A";
@@ -139,7 +147,7 @@ window.open(url);
 
 }
 
-/* Save Order */
+/* SAVE ORDER */
 function placeOrder(){
 
 if(cart.length == 0){
@@ -169,7 +177,7 @@ status: "Pending"
 
 localStorage.setItem("orders", JSON.stringify(orders));
 
-alert("Order Placed! ID: " + orderID);
+alert("✅ Order Placed! ID: " + orderID);
 
 cart = [];
 localStorage.removeItem("cart");
@@ -178,23 +186,18 @@ renderCart();
 
 }
 
+/* LOAD */
 renderCart();
 
 </script>
 
-<!-- Bottom Navigation -->
+<!-- Bottom Nav -->
 <div class="bottom-nav">
-
 <a href="index.html">🏠<br>Home</a>
-
-<a href="#">📂<br>Categories</a>
-
+<a href="wishlist.html">❤️<br>Wishlist</a>
 <a href="cart.html">🛒<br>Cart</a>
-
 <a href="orders.html">📦<br>Orders</a>
-
 <a href="profile.html">👤<br>Profile</a>
-
 </div>
 
 </body>
