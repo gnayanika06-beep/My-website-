@@ -11,7 +11,7 @@
 <!-- Header -->
 <div class="header">
 <h2>🛍 MyShop</h2>
-<input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
+<input type="text" id="searchInput" placeholder="Search products..." onkeyup="filterProducts()">
 </div>
 
 <!-- Banner -->
@@ -22,10 +22,25 @@
 <!-- Categories -->
 <div class="categories">
 
-<div class="cat"><img src="https://cdn-icons-png.flaticon.com/128/892/892458.png"><p>Fashion</p></div>
-<div class="cat"><img src="https://cdn-icons-png.flaticon.com/128/3075/3075977.png"><p>Beauty</p></div>
-<div class="cat"><img src="https://cdn-icons-png.flaticon.com/128/3081/3081559.png"><p>Kids</p></div>
-<div class="cat"><img src="https://cdn-icons-png.flaticon.com/128/1046/1046857.png"><p>Kitchen</p></div>
+<div class="cat" onclick="selectCategory('All')">
+<p>All</p>
+</div>
+
+<div class="cat" onclick="selectCategory('Fashion')">
+<p>Fashion</p>
+</div>
+
+<div class="cat" onclick="selectCategory('Beauty')">
+<p>Beauty</p>
+</div>
+
+<div class="cat" onclick="selectCategory('Kids')">
+<p>Kids</p>
+</div>
+
+<div class="cat" onclick="selectCategory('Kitchen')">
+<p>Kitchen</p>
+</div>
 
 </div>
 
@@ -35,7 +50,7 @@
 <!-- Bottom Nav -->
 <div class="bottom-nav">
 <a href="index.html">🏠<br>Home</a>
-<a href="#">📂<br>Categories</a>
+<a href="wishlist.html">❤️<br>Wishlist</a>
 <a href="cart.html">🛒<br>Cart (<span id="cartCount">0</span>)</a>
 <a href="orders.html">📦<br>Orders</a>
 <a href="profile.html">👤<br>Profile</a>
@@ -44,6 +59,7 @@
 <script>
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
+let selectedCategory = "All";
 
 /* SHOW PRODUCTS */
 function showProducts(list){
@@ -51,7 +67,6 @@ function showProducts(list){
 let container = document.getElementById("productList");
 container.innerHTML = "";
 
-// No product
 if(list.length === 0){
 container.innerHTML = "<p style='text-align:center;'>No products found 😢</p>";
 return;
@@ -62,19 +77,32 @@ list.forEach(p => {
 let div = document.createElement("div");
 div.className = "card";
 
-// Open product page
+/* Open Product Page */
 div.onclick = function(){
 window.location.href = `product.html?name=${p.name}&price=${p.price}&image=${p.image}`;
 };
 
 div.innerHTML = `
+
+<div style="position:relative;">
+
 <img src="${p.image}">
+
+<!-- ❤️ Wishlist -->
+<span onclick="event.stopPropagation(); toggleWishlist('${p.name}','${p.price}','${p.image}')" 
+style="position:absolute; top:5px; right:10px; font-size:20px; cursor:pointer;">
+❤️
+</span>
+
+</div>
+
 <h4>${p.name}</h4>
 <p>₹${p.price}</p>
 
 <button onclick="event.stopPropagation(); addToCart('${p.name}', '${p.price}', '${p.image}')">
 Add to Cart
 </button>
+
 `;
 
 container.appendChild(div);
@@ -83,14 +111,26 @@ container.appendChild(div);
 
 }
 
-/* SEARCH */
-function searchProducts(){
+/* CATEGORY SELECT */
+function selectCategory(cat){
+selectedCategory = cat;
+filterProducts();
+}
 
-let value = document.getElementById("searchInput").value.toLowerCase();
+/* SEARCH + CATEGORY FILTER */
+function filterProducts(){
 
-let filtered = products.filter(p =>
-p.name.toLowerCase().includes(value)
-);
+let searchValue = document.getElementById("searchInput").value.toLowerCase();
+
+let filtered = products.filter(p => {
+
+let matchSearch = p.name.toLowerCase().includes(searchValue);
+
+let matchCategory = (selectedCategory === "All" || p.category === selectedCategory);
+
+return matchSearch && matchCategory;
+
+});
 
 showProducts(filtered);
 
@@ -119,20 +159,38 @@ updateCartCount();
 
 }
 
+/* ❤️ WISHLIST */
+function toggleWishlist(name, price, image){
+
+let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+let existing = wishlist.find(item => item.name === name);
+
+if(existing){
+wishlist = wishlist.filter(item => item.name !== name);
+alert("Removed from wishlist");
+}else{
+wishlist.push({name, price, image});
+alert("Added to wishlist ❤️");
+}
+
+localStorage.setItem("wishlist", JSON.stringify(wishlist);
+
+}
+
 /* CART COUNT */
 function updateCartCount(){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 let totalQty = 0;
-
 cart.forEach(item => totalQty += item.quantity);
 
 document.getElementById("cartCount").innerText = totalQty;
 
 }
 
-/* AUTO LOAD */
+/* LOAD */
 showProducts(products);
 updateCartCount();
 
