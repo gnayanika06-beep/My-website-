@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Orders</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<h2>My Orders</h2>
+<div class="header">
+<h2>📦 My Orders</h2>
+<a href="index.html" style="color:white;">⬅ Back</a>
+</div>
 
-<div id="orders"></div>
+<div id="orders" style="padding:10px;"></div>
 
 <script>
 
@@ -17,31 +21,48 @@ let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
 let container = document.getElementById("orders");
 
-if(orders.length == 0){
-container.innerHTML = "<p>No orders yet</p>";
+if(orders.length === 0){
+container.innerHTML = "<p style='text-align:center;'>😢 No orders yet</p>";
 }else{
 
 orders.forEach(o=>{
 
 let itemsHTML = "";
-
 o.items.forEach(item=>{
 itemsHTML += `<p>${item.name} (x${item.quantity})</p>`;
 });
 
+/* Status color */
 let color = "orange";
-
 if(o.status == "Shipped") color = "blue";
 if(o.status == "Delivered") color = "green";
+
+/* Tracking steps */
+let step1 = o.status === "Pending" || o.status === "Shipped" || o.status === "Delivered" ? "green" : "#ccc";
+let step2 = o.status === "Shipped" || o.status === "Delivered" ? "green" : "#ccc";
+let step3 = o.status === "Delivered" ? "green" : "#ccc";
 
 container.innerHTML += `
 <div class="card">
 
-<h4>Order ID: ${o.id}</h4>
+<h4>🧾 Order ID: ${o.id}</h4>
 
 <p>Status: <b style="color:${color}">${o.status}</b></p>
 
+<!-- Tracking UI -->
+<div style="display:flex; justify-content:space-between; margin:10px 0; font-size:12px;">
+
+<span style="color:${step1}">🟡 Ordered</span>
+<span style="color:${step2}">🚚 Shipped</span>
+<span style="color:${step3}">✅ Delivered</span>
+
+</div>
+
+<hr>
+
 ${itemsHTML}
+
+<hr>
 
 <p><b>Name:</b> ${o.name}</p>
 <p><b>Address:</b> ${o.address}</p>
@@ -54,6 +75,15 @@ ${itemsHTML}
 }
 
 </script>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+<a href="index.html">🏠<br>Home</a>
+<a href="wishlist.html">❤️<br>Wishlist</a>
+<a href="cart.html">🛒<br>Cart</a>
+<a href="orders.html">📦<br>Orders</a>
+<a href="profile.html">👤<br>Profile</a>
+</div>
 
 </body>
 </html>
