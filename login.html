@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="card" style="margin:20px;">
+<h2>🔐 Login</h2>
+
+<input type="text" id="loginUser" placeholder="Username"><br><br>
+<input type="password" id="loginPass" placeholder="Password"><br><br>
+
+<button onclick="login()">Login</button>
+
+<p>Don't have account? <a href="signup.html">Signup</a></p>
+
+</div>
+
+<script>
+
+function login(){
+
+let username = document.getElementById("loginUser").value;
+let password = document.getElementById("loginPass").value;
+
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+let user = users.find(u => u.username === username && u.password === password);
+
+if(user){
+localStorage.setItem("currentUser", username);
+alert("Login Success");
+window.location.href = "index.html";
+}else{
+alert("Invalid username or password");
+}
+
+}
+
+</script>
+
+</body>
+</html>
