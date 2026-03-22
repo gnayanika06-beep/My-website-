@@ -8,42 +8,51 @@
 
 <body>
 
-<!-- Login -->
-<div id="loginBox">
-<h3>Admin Login</h3>
+<!-- LOGIN -->
+<div id="loginBox" class="card" style="margin:20px;">
+<h3>🔐 Admin Login</h3>
 <input type="password" id="adminPass" placeholder="Enter Password">
 <button onclick="login()">Login</button>
 </div>
 
-<!-- Admin Panel -->
-<div id="adminPanel" style="display:none;">
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none; padding:10px;">
 
-<h2>Admin Panel</h2>
+<h2>⚙️ Admin Panel</h2>
 
-<!-- Add Product -->
-<h3>Add Product</h3>
+<!-- ADD PRODUCT -->
+<h3>➕ Add Product</h3>
 
 <input type="text" id="name" placeholder="Product Name"><br><br>
 <input type="number" id="price" placeholder="Price"><br><br>
 <input type="text" id="image" placeholder="Image URL"><br><br>
 
+<select id="category">
+<option>Fashion</option>
+<option>Beauty</option>
+<option>Kids</option>
+<option>Kitchen</option>
+</select>
+
+<br><br>
+
 <button onclick="addProduct()">Add Product</button>
 
-<!-- Product List -->
-<h3>Products</h3>
+<!-- PRODUCT LIST -->
+<h3>📦 Products</h3>
 <div id="productList"></div>
 
 <hr>
 
-<!-- Orders -->
-<h3>Orders</h3>
+<!-- ORDERS -->
+<h3>📦 Orders</h3>
 <div id="orderList"></div>
 
 </div>
 
 <script>
 
-// LOGIN
+/* LOGIN */
 function login(){
 let pass = document.getElementById("adminPass").value.trim();
 
@@ -57,7 +66,7 @@ alert("Wrong Password");
 }
 }
 
-// PRODUCTS
+/* PRODUCTS */
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
 function showProducts(){
@@ -68,9 +77,19 @@ list.innerHTML = "";
 products.forEach((p,i)=>{
 
 list.innerHTML += `
-<div class="card">
-${p.name} - ₹${p.price}
-<button onclick="deleteProduct(${i})">Delete</button>
+<div class="card" style="display:flex; gap:10px; align-items:center;">
+
+<img src="${p.image}" style="width:60px; height:60px; border-radius:8px;">
+
+<div style="flex:1;">
+<p>${p.name}</p>
+<p>₹${p.price}</p>
+<p style="font-size:12px; color:gray;">${p.category || "No category"}</p>
+</div>
+
+<button onclick="editProduct(${i})">✏️</button>
+<button onclick="deleteProduct(${i})">❌</button>
+
 </div>
 `;
 
@@ -83,25 +102,43 @@ function addProduct(){
 let name = document.getElementById("name").value;
 let price = document.getElementById("price").value;
 let image = document.getElementById("image").value;
+let category = document.getElementById("category").value;
 
 if(name=="" || price=="" || image==""){
 alert("Fill all fields");
 return;
 }
 
-products.push({name,price,image});
+products.push({name,price,image,category});
 
 localStorage.setItem("products",JSON.stringify(products));
 
 showProducts();
 
-// clear input
+/* clear */
 document.getElementById("name").value = "";
 document.getElementById("price").value = "";
 document.getElementById("image").value = "";
 
 }
 
+/* EDIT */
+function editProduct(i){
+
+let newName = prompt("Edit name", products[i].name);
+let newPrice = prompt("Edit price", products[i].price);
+
+if(newName && newPrice){
+products[i].name = newName;
+products[i].price = newPrice;
+
+localStorage.setItem("products", JSON.stringify(products));
+showProducts();
+}
+
+}
+
+/* DELETE */
 function deleteProduct(i){
 
 if(confirm("Delete product?")){
@@ -112,7 +149,7 @@ showProducts();
 
 }
 
-// ORDERS
+/* ORDERS */
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
 function renderOrders(){
@@ -135,13 +172,22 @@ itemsHTML += `<p>${item.name} (x${item.quantity})</p>`;
 total += item.price * item.quantity;
 });
 
+/* status color */
+let color = "orange";
+if(o.status == "Shipped") color = "blue";
+if(o.status == "Delivered") color = "green";
+
 container.innerHTML += `
 <div class="card">
 
-<h4>Order ID: ${o.id}</h4>
-<p>Status: <b>${o.status}</b></p>
+<h4>🧾 ${o.id}</h4>
+
+<p>Status: <b style="color:${color}">${o.status}</b></p>
+
 <p><b>Name:</b> ${o.name}</p>
 <p><b>Address:</b> ${o.address}</p>
+
+<hr>
 
 ${itemsHTML}
 
@@ -164,7 +210,7 @@ ${itemsHTML}
 
 }
 
-// CHANGE STATUS
+/* CHANGE STATUS */
 function changeStatus(index, status){
 
 orders[index].status = status;
@@ -175,7 +221,7 @@ renderOrders();
 
 }
 
-// DELETE ORDER
+/* DELETE ORDER */
 function deleteOrder(index){
 
 if(confirm("Delete order?")){
