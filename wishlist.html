@@ -13,7 +13,19 @@
 <div id="wishlistItems" class="products"></div>
 
 <script>
+function showToast(message){
 
+let toast = document.getElementById("toast");
+
+toast.innerText = message;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+toast.classList.remove("show");
+}, 2000);
+
+}
 let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
 let container = document.getElementById("wishlistItems");
