@@ -44,7 +44,19 @@
 </div>
 
 <script>
+function showToast(message){
 
+let toast = document.getElementById("toast");
+
+toast.innerText = message;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+toast.classList.remove("show");
+}, 2000);
+
+}
 // 🔐 LOGIN CHECK
 let currentUser = localStorage.getItem("currentUser");
 
