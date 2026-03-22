@@ -8,35 +8,86 @@
 
 <body>
 
-<h2>Product Details</h2>
+<div class="header">
+<h2>🛍 Product Details</h2>
+<a href="index.html" style="color:white;">⬅ Back</a>
+</div>
 
 <div class="card" id="productDetails"></div>
 
-<button onclick="addToCart()">Add to Cart</button>
-<button onclick="buyNow()">Buy Now</button>
+<!-- Quantity -->
+<div style="text-align:center; margin:10px;">
+<button onclick="changeQty(-1)">➖</button>
+<span id="qty">1</span>
+<button onclick="changeQty(1)">➕</button>
+</div>
+
+<!-- Buttons -->
+<button onclick="addToCart()">🛒 Add to Cart</button>
+<button onclick="buyNow()">⚡ Buy Now</button>
+
+<!-- Rating -->
+<h3 style="text-align:center;">⭐ Rate this product</h3>
+<div id="stars" style="text-align:center;">
+<span onclick="rate(1)">⭐</span>
+<span onclick="rate(2)">⭐</span>
+<span onclick="rate(3)">⭐</span>
+<span onclick="rate(4)">⭐</span>
+<span onclick="rate(5)">⭐</span>
+</div>
+
+<p id="ratingMsg" style="text-align:center;"></p>
 
 <script>
 
-// Get product data from URL
+// GET DATA
 let urlParams = new URLSearchParams(window.location.search);
 
 let name = urlParams.get("name");
-let price = urlParams.get("price");
+let price = parseInt(urlParams.get("price"));
 let image = urlParams.get("image");
 
-// Show product
+let qty = 1;
+
+/* DISCOUNT */
+let discountPrice = Math.floor(price * 0.8);
+
+/* SHOW PRODUCT */
 document.getElementById("productDetails").innerHTML = `
 <img src="${image}">
 <h3>${name}</h3>
-<p>₹${price}</p>
+
+<p>
+<span style="text-decoration:line-through; color:gray;">₹${price}</span>
+<span style="color:green; font-weight:bold;"> ₹${discountPrice}</span>
+</p>
+
+<button onclick="toggleWishlist()" style="background:red;">❤️ Wishlist</button>
 `;
 
-// Add to Cart
+/* QUANTITY */
+function changeQty(change){
+
+qty += change;
+
+if(qty < 1) qty = 1;
+
+document.getElementById("qty").innerText = qty;
+
+}
+
+/* ADD TO CART */
 function addToCart(){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-cart.push({name, price, image, quantity:1});
+let existing = cart.find(item => item.name === name);
+
+if(existing){
+existing.quantity += qty;
+}else{
+cart.push({name, price:discountPrice, image, quantity:qty});
+}
 
 localStorage.setItem("cart", JSON.stringify(cart));
 
@@ -44,10 +95,48 @@ alert("Added to cart");
 
 }
 
-// Buy Now
+/* BUY NOW */
 function buyNow(){
 addToCart();
 window.location.href = "cart.html";
+}
+
+/* ❤️ WISHLIST */
+function toggleWishlist(){
+
+let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+let existing = wishlist.find(item => item.name === name);
+
+if(existing){
+wishlist = wishlist.filter(item => item.name !== name);
+alert("Removed from wishlist");
+}else{
+wishlist.push({name, price, image});
+alert("Added to wishlist ❤️");
+}
+
+localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+}
+
+/* ⭐ RATING */
+function rate(star){
+
+let ratings = JSON.parse(localStorage.getItem("ratings")) || {};
+
+if(!ratings[name]){
+ratings[name] = {total:0, count:0, avg:0};
+}
+
+ratings[name].total += star;
+ratings[name].count += 1;
+ratings[name].avg = ratings[name].total / ratings[name].count;
+
+localStorage.setItem("ratings", JSON.stringify(ratings));
+
+document.getElementById("ratingMsg").innerText = "Thanks for rating ⭐";
+
 }
 
 </script>
