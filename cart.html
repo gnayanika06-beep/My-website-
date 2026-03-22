@@ -18,49 +18,53 @@
 
 <div id="cart-items"></div>
 
-<!-- Total -->
 <h2 id="cart-total" class="cart-total">Total: ₹0</h2>
 
 <br><br><br>
 
-<!-- User Info -->
 <input type="text" id="customerName" placeholder="Your Name">
-
 <br><br>
-
 <textarea id="customerAddress" placeholder="Your Delivery Address"></textarea>
 
 <br><br>
 
-<button onclick="orderOnWhatsApp()">📲 Order on WhatsApp</button>
-
-<button onclick="placeOrder()">✅ Place Order</button>
+<button onclick="goToPayment()">💳 Pay Now</button>
+<button onclick="orderOnWhatsApp()">📲 WhatsApp Order</button>
 
 </main>
 
 <script>
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+// 🔐 USER
+let currentUser = localStorage.getItem("currentUser");
 
-/* REMOVE ITEM */
+if(!currentUser){
+window.location.href = "login.html";
+}
+
+// 🧠 USER KEYS
+let cartKey = "cart_" + currentUser;
+let ordersKey = "orders_" + currentUser;
+
+let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+/* REMOVE */
 function removeItem(index){
 cart.splice(index,1);
-localStorage.setItem("cart",JSON.stringify(cart));
+localStorage.setItem(cartKey,JSON.stringify(cart));
 renderCart();
 }
 
-/* QUANTITY CHANGE */
+/* QTY */
 function changeQty(index, change){
-
 cart[index].quantity += change;
 
 if(cart[index].quantity <= 0){
 cart.splice(index,1);
 }
 
-localStorage.setItem("cart", JSON.stringify(cart));
+localStorage.setItem(cartKey, JSON.stringify(cart));
 renderCart();
-
 }
 
 /* SHOW CART */
@@ -92,9 +96,9 @@ container.innerHTML += `
 <p style="font-weight:bold;">${item.name}</p>
 <p style="color:green;">₹${item.price}</p>
 
-<div style="margin-top:5px;">
+<div>
 <button onclick="changeQty(${i}, -1)">➖</button>
-<span style="margin:0 10px;">${item.quantity}</span>
+<span>${item.quantity}</span>
 <button onclick="changeQty(${i}, 1)">➕</button>
 </div>
 
@@ -108,47 +112,10 @@ container.innerHTML += `
 });
 
 totalEl.textContent = "Total: ₹" + total;
-
 }
 
-/* WHATSAPP ORDER */
-function orderOnWhatsApp(){
-
-if(cart.length == 0){
-alert("Your cart is empty");
-return;
-}
-
-let name = document.getElementById("customerName").value;
-let address = document.getElementById("customerAddress").value;
-
-if(name == "" || address == ""){
-alert("Please enter your name and address");
-return;
-}
-
-let phone = "91XXXXXXXXXX"; // 👉 নিজের নম্বর বসাও
-
-let message = "New Order%0A%0A";
-message += "Name: " + name + "%0A";
-message += "Address: " + address + "%0A%0A";
-
-let total = 0;
-
-cart.forEach((item,i)=>{
-message += (i+1) + ". " + item.name + " x " + item.quantity + "%0A";
-total += item.price * item.quantity;
-});
-
-message += "%0ATotal: ₹" + total;
-
-let url = "https://wa.me/" + phone + "?text=" + message;
-window.open(url);
-
-}
-
-/* SAVE ORDER */
-function placeOrder(){
+/* 💳 GO TO PAYMENT */
+function goToPayment(){
 
 if(cart.length == 0){
 alert("Cart is empty");
@@ -163,26 +130,47 @@ alert("Enter name & address");
 return;
 }
 
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
+// save temp order
+localStorage.setItem("tempOrder", JSON.stringify({
+name, address, cart
+}));
 
-let orderID = "ORD" + Math.floor(Math.random()*100000);
+window.location.href = "payment.html";
 
-orders.push({
-id: orderID,
-items: cart,
-name: name,
-address: address,
-status: "Pending"
+}
+
+/* 📲 WHATSAPP */
+function orderOnWhatsApp(){
+
+if(cart.length == 0){
+alert("Cart is empty");
+return;
+}
+
+let name = document.getElementById("customerName").value;
+let address = document.getElementById("customerAddress").value;
+
+if(name == "" || address == ""){
+alert("Enter name & address");
+return;
+}
+
+let phone = "91XXXXXXXXXX";
+
+let message = "New Order%0A%0A";
+message += "Name: " + name + "%0A";
+message += "Address: " + address + "%0A%0A";
+
+let total = 0;
+
+cart.forEach((item,i)=>{
+message += (i+1) + ". " + item.name + " x " + item.quantity + "%0A";
+total += item.price * item.quantity;
 });
 
-localStorage.setItem("orders", JSON.stringify(orders));
+message += "%0ATotal: ₹" + total;
 
-alert("✅ Order Placed! ID: " + orderID);
-
-cart = [];
-localStorage.removeItem("cart");
-
-renderCart();
+window.open("https://wa.me/" + phone + "?text=" + message);
 
 }
 
