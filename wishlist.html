@@ -8,31 +8,46 @@
 
 <body>
 
+<div id="toast"></div>
+
 <h2 style="text-align:center;">❤️ My Wishlist</h2>
 
 <div id="wishlistItems" class="products"></div>
 
 <script>
+
+/* 🔔 TOAST */
 function showToast(message){
-
 let toast = document.getElementById("toast");
-
 toast.innerText = message;
-
 toast.classList.add("show");
-
-setTimeout(()=>{
-toast.classList.remove("show");
-}, 2000);
-
+setTimeout(()=>toast.classList.remove("show"),2000);
 }
-let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+/* 🔐 USER */
+let currentUser = localStorage.getItem("currentUser");
+
+if(!currentUser){
+window.location.href = "login.html";
+}
+
+/* USER KEYS */
+let wishlistKey = "wishlist_" + currentUser;
+let cartKey = "cart_" + currentUser;
+
+let wishlist = JSON.parse(localStorage.getItem(wishlistKey)) || [];
 
 let container = document.getElementById("wishlistItems");
 
+/* SHOW */
+function showWishlist(){
+
+container.innerHTML = "";
+
 if(wishlist.length === 0){
-container.innerHTML = "<p style='text-align:center;'>No items in wishlist 😢</p>";
-}else{
+container.innerHTML = "<p style='text-align:center;'>No items 😢</p>";
+return;
+}
 
 wishlist.forEach((item,i)=>{
 
@@ -43,7 +58,8 @@ container.innerHTML += `
 <h4>${item.name}</h4>
 <p>₹${item.price}</p>
 
-<button onclick="removeItem(${i})">Remove</button>
+<button onclick="addToCart(${i})">🛒 Move to Cart</button>
+<button onclick="removeItem(${i})">❌ Remove</button>
 
 </div>
 `;
@@ -52,15 +68,48 @@ container.innerHTML += `
 
 }
 
+/* REMOVE */
 function removeItem(index){
 
 wishlist.splice(index,1);
 
-localStorage.setItem("wishlist", JSON.stringify(wishlist));
+localStorage.setItem(wishlistKey, JSON.stringify(wishlist));
 
-location.reload();
+showToast("Removed ❌");
+
+showWishlist();
 
 }
+
+/* MOVE TO CART */
+function addToCart(index){
+
+let item = wishlist[index];
+
+let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+let existing = cart.find(p => p.name === item.name);
+
+if(existing){
+existing.quantity += 1;
+}else{
+cart.push({...item, quantity:1});
+}
+
+localStorage.setItem(cartKey, JSON.stringify(cart));
+
+/* remove from wishlist */
+wishlist.splice(index,1);
+localStorage.setItem(wishlistKey, JSON.stringify(wishlist));
+
+showToast("Moved to cart 🛒");
+
+showWishlist();
+
+}
+
+/* LOAD */
+showWishlist();
 
 </script>
 
