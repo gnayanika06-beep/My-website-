@@ -8,6 +8,8 @@
 
 <body>
 
+<div id="toast"></div>
+
 <div class="header">
 <h2>📦 My Orders</h2>
 <a href="index.html" style="color:white;">⬅ Back</a>
@@ -16,43 +18,56 @@
 <div id="orders" style="padding:10px;"></div>
 
 <script>
+
+/* 🔔 TOAST */
 function showToast(message){
-
 let toast = document.getElementById("toast");
-
 toast.innerText = message;
-
 toast.classList.add("show");
-
-setTimeout(()=>{
-toast.classList.remove("show");
-}, 2000);
-
+setTimeout(()=>toast.classList.remove("show"),2000);
 }
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+/* 🔐 USER */
+let currentUser = localStorage.getItem("currentUser");
+
+if(!currentUser){
+window.location.href = "login.html";
+}
+
+/* USER KEY */
+let ordersKey = "orders_" + currentUser;
+
+let orders = JSON.parse(localStorage.getItem(ordersKey)) || [];
 
 let container = document.getElementById("orders");
 
+/* SHOW */
+function showOrders(){
+
+container.innerHTML = "";
+
 if(orders.length === 0){
 container.innerHTML = "<p style='text-align:center;'>😢 No orders yet</p>";
-}else{
+return;
+}
 
 orders.forEach(o=>{
 
 let itemsHTML = "";
+
 o.items.forEach(item=>{
 itemsHTML += `<p>${item.name} (x${item.quantity})</p>`;
 });
 
-/* Status color */
+/* STATUS COLOR */
 let color = "orange";
 if(o.status == "Shipped") color = "blue";
 if(o.status == "Delivered") color = "green";
 
-/* Tracking steps */
-let step1 = o.status === "Pending" || o.status === "Shipped" || o.status === "Delivered" ? "green" : "#ccc";
-let step2 = o.status === "Shipped" || o.status === "Delivered" ? "green" : "#ccc";
-let step3 = o.status === "Delivered" ? "green" : "#ccc";
+/* TRACKING */
+let step1 = (o.status=="Pending" || o.status=="Shipped" || o.status=="Delivered") ? "green" : "#ccc";
+let step2 = (o.status=="Shipped" || o.status=="Delivered") ? "green" : "#ccc";
+let step3 = (o.status=="Delivered") ? "green" : "#ccc";
 
 container.innerHTML += `
 <div class="card">
@@ -61,7 +76,7 @@ container.innerHTML += `
 
 <p>Status: <b style="color:${color}">${o.status}</b></p>
 
-<!-- Tracking UI -->
+<!-- 🔥 TRACKING UI -->
 <div style="display:flex; justify-content:space-between; margin:10px 0; font-size:12px;">
 
 <span style="color:${step1}">🟡 Ordered</span>
@@ -85,6 +100,9 @@ ${itemsHTML}
 });
 
 }
+
+/* LOAD */
+showOrders();
 
 </script>
 
