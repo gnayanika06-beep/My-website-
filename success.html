@@ -16,6 +16,13 @@
 
 <br>
 
+<!-- 🧾 NEW BUTTON -->
+<a id="invoiceLink">
+<button>🧾 View Invoice</button>
+</a>
+
+<br><br>
+
 <a href="index.html">
 <button>🏠 Go Home</button>
 </a>
@@ -26,6 +33,9 @@ let params = new URLSearchParams(window.location.search);
 let id = params.get("id");
 
 document.getElementById("orderID").innerText = "Order ID: " + id;
+
+/* 👉 ADD THIS */
+document.getElementById("invoiceLink").href = "invoice.html?id=" + id;
 
 </script>
 
