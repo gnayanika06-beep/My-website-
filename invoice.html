@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body style="padding:15px;">
+
+<h2 style="text-align:center;">🧾 Invoice</h2>
+
+<div id="invoice"></div>
+
+<br>
+
+<button onclick="window.print()">🖨️ Print / Download</button>
+
+<script>
+
+/* 🔐 USER */
+let currentUser = localStorage.getItem("currentUser");
+
+if(!currentUser){
+window.location.href = "login.html";
+}
+
+/* GET ORDER ID */
+let params = new URLSearchParams(window.location.search);
+let orderID = params.get("id");
+
+/* USER ORDERS */
+let ordersKey = "orders_" + currentUser;
+let orders = JSON.parse(localStorage.getItem(ordersKey)) || [];
+
+let order = orders.find(o => o.id == orderID);
+
+let container = document.getElementById("invoice");
+
+if(!order){
+container.innerHTML = "<p>Order not found ❌</p>";
+}else{
+
+let itemsHTML = "";
+let total = 0;
+
+order.items.forEach(item=>{
+itemsHTML += `
+<p>${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}</p>
+`;
+total += item.price * item.quantity;
+});
+
+container.innerHTML = `
+<div class="card">
+
+<h3>Order ID: ${order.id}</h3>
+
+<hr>
+
+${itemsHTML}
+
+<hr>
+
+<p><b>Total:</b> ₹${total}</p>
+
+<hr>
+
+<p><b>Name:</b> ${order.name}</p>
+<p><b>Address:</b> ${order.address}</p>
+
+</div>
+`;
+
+}
+
+</script>
+
+</body>
+</html>
