@@ -31,7 +31,9 @@
 
 <br><br>
 
-<button onclick="goToPayment()">💳 Pay Now</button>
+<!-- ✅ COD BUTTON -->
+<button onclick="placeCODOrder()">🛒 Place Order (Cash on Delivery)</button>
+
 <button onclick="orderOnWhatsApp()">📲 WhatsApp Order</button>
 
 </main>
@@ -55,6 +57,8 @@ window.location.href = "login.html";
 
 /* 🧠 USER KEYS */
 let cartKey = "cart_" + currentUser;
+let ordersKey = "orders_" + currentUser;
+
 let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
 
 /* ❌ REMOVE ITEM */
@@ -131,8 +135,8 @@ container.innerHTML += `
 totalEl.textContent = "Total: ₹" + total;
 }
 
-/* 💳 PAYMENT */
-function goToPayment(){
+/* 🛒 COD ORDER (FINAL PRO) */
+function placeCODOrder(){
 
 if(cart.length == 0){
 showToast("Cart is empty ❌");
@@ -147,14 +151,35 @@ showToast("Enter name & address ⚠️");
 return;
 }
 
-/* SAVE TEMP ORDER */
-localStorage.setItem("tempOrder", JSON.stringify({
-name,
-address,
-cart
-}));
+/* Total */
+let total = 0;
+cart.forEach(item => total += item.price * item.quantity);
 
-window.location.href = "payment.html";
+/* Unique Order ID */
+let orderID = "ORD" + Date.now();
+
+/* Save Order */
+let orders = JSON.parse(localStorage.getItem(ordersKey)) || [];
+
+orders.push({
+id: orderID,
+items: cart,
+name: name,
+address: address,
+total: total,
+status: "Pending",
+payment: "COD",
+date: new Date().toLocaleString()
+});
+
+localStorage.setItem(ordersKey, JSON.stringify(orders));
+
+/* Clear Cart */
+localStorage.removeItem(cartKey);
+
+/* Success */
+window.location.href = "success.html?id=" + orderID;
+
 }
 
 /* 📲 WHATSAPP ORDER */
