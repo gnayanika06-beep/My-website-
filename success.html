@@ -8,15 +8,16 @@
 
 <body style="text-align:center; padding:20px;">
 
-<h1 style="color:green;">✅ Payment Successful</h1>
+<h1 style="color:green;">✅ Order Placed</h1>
 
 <h3 id="orderID"></h3>
 
-<p>Your order has been placed successfully 🎉</p>
+<p>Payment Mode: Cash on Delivery 💰</p>
+
+<p>Your order will be delivered soon 🚚</p>
 
 <br>
 
-<!-- 🧾 NEW BUTTON -->
 <a id="invoiceLink">
 <button>🧾 View Invoice</button>
 </a>
@@ -34,7 +35,7 @@ let id = params.get("id");
 
 document.getElementById("orderID").innerText = "Order ID: " + id;
 
-/* 👉 ADD THIS */
+/* Invoice link */
 document.getElementById("invoiceLink").href = "invoice.html?id=" + id;
 
 </script>
