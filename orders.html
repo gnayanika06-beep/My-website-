@@ -36,12 +36,11 @@ window.location.href = "login.html";
 
 /* USER KEY */
 let ordersKey = "orders_" + currentUser;
-
 let orders = JSON.parse(localStorage.getItem(ordersKey)) || [];
 
 let container = document.getElementById("orders");
 
-/* SHOW */
+/* SHOW ORDERS */
 function showOrders(){
 
 container.innerHTML = "";
@@ -54,9 +53,11 @@ return;
 orders.forEach(o=>{
 
 let itemsHTML = "";
+let total = 0;
 
 o.items.forEach(item=>{
 itemsHTML += `<p>${item.name} (x${item.quantity})</p>`;
+total += item.price * item.quantity;
 });
 
 /* STATUS COLOR */
@@ -76,6 +77,10 @@ container.innerHTML += `
 
 <p>Status: <b style="color:${color}">${o.status}</b></p>
 
+<p><b>Payment:</b> 💰 ${o.payment || "COD"}</p>
+
+<p><b>Date:</b> ${o.date || "-"}</p>
+
 <!-- 🔥 TRACKING UI -->
 <div style="display:flex; justify-content:space-between; margin:10px 0; font-size:12px;">
 
@@ -91,14 +96,26 @@ ${itemsHTML}
 
 <hr>
 
+<p><b>Total:</b> ₹${total}</p>
+
 <p><b>Name:</b> ${o.name}</p>
 <p><b>Address:</b> ${o.address}</p>
+
+<br>
+
+<!-- 🧾 INVOICE BUTTON -->
+<button onclick="viewInvoice('${o.id}')">🧾 View Invoice</button>
 
 </div>
 `;
 
 });
 
+}
+
+/* 🧾 INVOICE */
+function viewInvoice(id){
+window.location.href = "invoice.html?id=" + id;
 }
 
 /* LOAD */
