@@ -1,68 +1,101 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Profile</title>
+<title>Profile</title>
 <link rel="stylesheet" href="styles.css">
-</head><body><h2>User Profile</h2><input type="text" id="userName" placeholder="Your Name">
-<br><br><input type="text" id="userPhone" placeholder="Phone Number">
-<br><br><textarea id="userAddress" placeholder="Delivery Address"></textarea><br><br>
+</head>
 
-<label>Dark Mode</label>
-<input type="checkbox" id="darkMode">
+<body style="padding:15px;">
 
-<br><br>
+<div id="toast"></div>
 
-<button onclick="saveUser()">Save</button>
+<h2>👤 My Profile</h2>
+
+<input type="text" id="name" placeholder="Your Name"><br><br>
+
+<input type="text" id="phone" disabled><br><br>
+
+<textarea id="address" placeholder="Full Address"></textarea><br><br>
+
+<input type="text" id="pincode" placeholder="Pincode"><br><br>
+
+<label>🌙 Dark Mode</label>
+<input type="checkbox" id="darkMode"><br><br>
+
+<button onclick="saveProfile()">💾 Save Profile</button>
 
 <script>
 
-function saveUser(){
-
-let name = document.getElementById("userName").value;
-let phone = document.getElementById("userPhone").value;
-let address = document.getElementById("userAddress").value;
-let dark = document.getElementById("darkMode").checked;
-
-localStorage.setItem("userName", name);
-localStorage.setItem("userPhone", phone);
-localStorage.setItem("userAddress", address);
-localStorage.setItem("darkMode", dark);
-
-alert("Profile Saved");
-
+function showToast(msg){
+let t=document.getElementById("toast");
+t.innerText=msg;
+t.classList.add("show");
+setTimeout(()=>t.classList.remove("show"),2000);
 }
 
-/* Load saved data */
+// USER
+let currentUser = localStorage.getItem("currentUser");
 
-document.getElementById("userName").value =
-localStorage.getItem("userName") || "";
+if(!currentUser){
+window.location.href="login.html";
+}
 
-document.getElementById("userPhone").value =
-localStorage.getItem("userPhone") || "";
+// USERS DATA
+let users = JSON.parse(localStorage.getItem("users")) || {};
 
-document.getElementById("userAddress").value =
-localStorage.getItem("userAddress") || "";
+// LOAD
+function loadProfile(){
 
-/* Dark Mode */
+let p = users[currentUser] || {};
 
-if(localStorage.getItem("darkMode") === "true"){
+document.getElementById("name").value = p.name || "";
+document.getElementById("address").value = p.address || "";
+document.getElementById("pincode").value = p.pincode || "";
+document.getElementById("phone").value = currentUser;
 
+if(p.darkMode){
 document.body.style.background="black";
 document.body.style.color="white";
-
 document.getElementById("darkMode").checked = true;
+}
 
 }
 
-</script><div class="bottom-nav"><a href="index.html">🏠<br>Home</a>
+// SAVE
+function saveProfile(){
 
-<a href="#">📂<br>Categories</a>
+let name = document.getElementById("name").value;
+let address = document.getElementById("address").value;
+let pincode = document.getElementById("pincode").value;
+let dark = document.getElementById("darkMode").checked;
 
-<a href="cart.html">🛒<br>Cart</a>
+if(name=="" || address=="" || pincode==""){
+alert("Fill all fields");
+return;
+}
 
-<a href="#">📦<br>Orders</a>
+users[currentUser] = {
+name,
+address,
+pincode,
+phone: currentUser,
+darkMode: dark
+};
 
-<a href="profile.html">👤<br>Profile</a>
+localStorage.setItem("users", JSON.stringify(users));
 
-</div></body>
+showToast("Saved ✅");
+
+setTimeout(()=>{
+window.location.href="index.html";
+},1000);
+
+}
+
+loadProfile();
+
+</script>
+
+</body>
 </html>
