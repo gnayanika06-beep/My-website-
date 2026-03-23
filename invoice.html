@@ -4,17 +4,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invoice</title>
 <link rel="stylesheet" href="styles.css">
+
+<style>
+table{
+width:100%;
+border-collapse: collapse;
+margin-top:10px;
+}
+th, td{
+border:1px solid #ddd;
+padding:8px;
+text-align:center;
+}
+th{
+background:#f2f2f2;
+}
+</style>
+
 </head>
 
 <body style="padding:15px;">
 
 <h2 style="text-align:center;">🧾 Invoice</h2>
 
-<div id="invoice"></div>
+<div id="invoice" class="card"></div>
 
 <br>
 
-<button onclick="window.print()">🖨️ Print / Download</button>
+<button onclick="printInvoice()">🖨️ Print / Download</button>
+
+<br><br>
+
+<a href="orders.html">
+<button>⬅ Back to Orders</button>
+</a>
 
 <script>
 
@@ -45,33 +68,57 @@ let itemsHTML = "";
 let total = 0;
 
 order.items.forEach(item=>{
+
+let price = Number(item.price) || 0;
+let qty = Number(item.quantity) || 0;
+let sub = price * qty;
+
 itemsHTML += `
-<p>${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}</p>
+<tr>
+<td>${item.name}</td>
+<td>${qty}</td>
+<td>₹${price}</td>
+<td>₹${sub}</td>
+</tr>
 `;
-total += item.price * item.quantity;
+
+total += sub;
+
 });
 
 container.innerHTML = `
-<div class="card">
-
 <h3>Order ID: ${order.id}</h3>
 
-<hr>
-
-${itemsHTML}
-
-<hr>
-
-<p><b>Total:</b> ₹${total}</p>
+<p><b>Date:</b> ${order.date || "-"}</p>
+<p><b>Payment:</b> ${order.payment || "COD"}</p>
 
 <hr>
 
 <p><b>Name:</b> ${order.name}</p>
 <p><b>Address:</b> ${order.address}</p>
 
-</div>
+<hr>
+
+<table>
+<tr>
+<th>Item</th>
+<th>Qty</th>
+<th>Price</th>
+<th>Total</th>
+</tr>
+
+${itemsHTML}
+
+</table>
+
+<h3 style="text-align:right;">Grand Total: ₹${total}</h3>
 `;
 
+}
+
+/* PRINT */
+function printInvoice(){
+window.print();
 }
 
 </script>
