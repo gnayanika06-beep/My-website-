@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,12 @@
 <!-- Header -->
 <div class="header">
 <h2>🛍 MyShop</h2>
+
+<!-- 👤 User Name Show -->
+<span id="userName" style="margin-left:10px;"></span>
+
 <button onclick="logout()" style="float:right;">Logout</button>
+
 <input type="text" id="searchInput" placeholder="Search products..." onkeyup="filterProducts()">
 </div>
 
@@ -59,9 +65,22 @@ toast.classList.remove("show");
 
 /* 🔐 LOGIN CHECK */
 let currentUser = localStorage.getItem("currentUser");
+
 if(!currentUser){
 window.location.href = "login.html";
 }
+
+/* 👤 PROFILE DATA */
+let users = JSON.parse(localStorage.getItem("users")) || {};
+let profile = users[currentUser] || {};
+
+/* 👉 Profile incomplete হলে profile page এ পাঠাও */
+if(!profile.name || !profile.address){
+window.location.href = "profile.html";
+}
+
+/* 👤 SHOW NAME */
+document.getElementById("userName").innerText = "👋 " + (profile.name || "");
 
 /* USER KEYS */
 let cartKey = "cart_" + currentUser;
@@ -100,7 +119,7 @@ let avg = ratings[p.name]?.avg || 0;
 /* DISCOUNT */
 let discountPrice = Math.floor(p.price * 0.8);
 
-/* CHECK WISHLIST ❤️ */
+/* CHECK WISHLIST */
 let wishlist = JSON.parse(localStorage.getItem(wishlistKey)) || [];
 let isWish = wishlist.find(item => item.name === p.name);
 
@@ -125,7 +144,7 @@ ${isWish ? "❤️" : "🤍"}
 
 <p>
 <span style="text-decoration:line-through; color:gray;">₹${p.price}</span>
-<span style="color:green; font-weight:bold;"> ₹${discountPrice}</span>
+<span style="color:green;"> ₹${discountPrice}</span>
 </p>
 
 <p style="color:orange;">
@@ -191,15 +210,15 @@ let existing = wishlist.find(item => item.name === name);
 
 if(existing){
 wishlist = wishlist.filter(item => item.name !== name);
-showToast("Removed from wishlist ❌");
+showToast("Removed ❌");
 }else{
 wishlist.push({name, price, image});
-showToast("Added to wishlist ❤️");
+showToast("Added ❤️");
 }
 
 localStorage.setItem(wishlistKey, JSON.stringify(wishlist));
 
-filterProducts(); // refresh UI
+filterProducts();
 }
 
 /* CART COUNT */
