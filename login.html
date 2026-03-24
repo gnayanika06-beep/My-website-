@@ -63,36 +63,40 @@ Don't have account? <a href="signup.html">Signup</a>
 
 <script>
 
-/* 🔥 AUTO REDIRECT FIX */
-let currentUser = localStorage.getItem("currentUser");
-
-if(currentUser){
-window.location.href = "index.html";
-}
-
-/* LOGIN */
 function login(){
 
 let username = document.getElementById("loginUser").value.trim();
 let password = document.getElementById("loginPass").value.trim();
 
-let users = JSON.parse(localStorage.getItem("users")) || [];
+/* 🔥 Default user auto create */
+let users = JSON.parse(localStorage.getItem("users"));
 
+if(!users || users.length === 0){
+users = [
+{username:"admin", password:"1234"},
+{username:"user", password:"1234"}
+];
+localStorage.setItem("users", JSON.stringify(users));
+}
+
+/* 🔍 Check user */
 let user = users.find(u => u.username === username && u.password === password);
 
 if(user){
 
 localStorage.setItem("currentUser", username);
 
-if(!localStorage.getItem("userName")){
+/* profile set */
 localStorage.setItem("userName", username);
-}
+localStorage.setItem("userAddress", "Demo Address");
 
 alert("Login Success ✅");
+
+/* 👉 redirect */
 window.location.href = "index.html";
 
 }else{
-alert("Invalid username ❌");
+alert("Invalid username or password ❌");
 }
 
 }
