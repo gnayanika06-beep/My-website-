@@ -22,10 +22,6 @@ box-shadow:0 4px 15px rgba(0,0,0,0.2);
 text-align:center;
 }
 
-.login-box h2{
-margin-bottom:15px;
-}
-
 input{
 width:100%;
 padding:10px;
@@ -43,15 +39,6 @@ border:none;
 border-radius:10px;
 font-weight:bold;
 margin-top:10px;
-}
-
-button:hover{
-background:#e60000;
-}
-
-a{
-color:#ff4d4d;
-font-weight:bold;
 }
 </style>
 
@@ -76,6 +63,14 @@ Don't have account? <a href="signup.html">Signup</a>
 
 <script>
 
+/* 🔥 AUTO REDIRECT FIX */
+let currentUser = localStorage.getItem("currentUser");
+
+if(currentUser){
+window.location.href = "index.html";
+}
+
+/* LOGIN */
 function login(){
 
 let username = document.getElementById("loginUser").value.trim();
@@ -87,20 +82,17 @@ let user = users.find(u => u.username === username && u.password === password);
 
 if(user){
 
-/* SAVE USER */
 localStorage.setItem("currentUser", username);
 
-/* AUTO PROFILE SET (PRO FEATURE) */
 if(!localStorage.getItem("userName")){
 localStorage.setItem("userName", username);
 }
 
-/* SUCCESS */
 alert("Login Success ✅");
 window.location.href = "index.html";
 
 }else{
-alert("Invalid username or password ❌");
+alert("Invalid username ❌");
 }
 
 }
