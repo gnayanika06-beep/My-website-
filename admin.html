@@ -4,28 +4,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel</title>
 <link rel="stylesheet" href="styles.css">
+
+<style>
+body{
+font-family:Arial;
+background:#f5f5f5;
+}
+
+.card{
+background:white;
+padding:15px;
+border-radius:12px;
+margin-bottom:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+input, select{
+width:100%;
+padding:10px;
+margin:5px 0;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+padding:10px;
+border:none;
+border-radius:8px;
+margin-top:5px;
+}
+
+.add-btn{
+background:green;
+color:white;
+width:100%;
+}
+
+.delete-btn{
+background:red;
+color:white;
+}
+
+.edit-btn{
+background:orange;
+color:white;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- 🔐 LOGIN -->
 <div id="loginBox" class="card" style="margin:20px;">
 <h3>🔐 Admin Login</h3>
 <input type="password" id="adminPass" placeholder="Enter Password">
 <button onclick="login()">Login</button>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ⚙️ ADMIN PANEL -->
 <div id="adminPanel" style="display:none; padding:10px;">
 
 <h2>⚙️ Admin Panel</h2>
 
-<!-- ADD PRODUCT -->
+<!-- ➕ ADD PRODUCT -->
 <h3>➕ Add Product</h3>
 
-<input type="text" id="name" placeholder="Product Name"><br><br>
-<input type="number" id="price" placeholder="Price"><br><br>
-<input type="text" id="image" placeholder="Image URL"><br><br>
+<input type="text" id="name" placeholder="Product Name">
+<input type="number" id="price" placeholder="Price">
+<input type="text" id="image" placeholder="Image URL">
 
 <select id="category">
 <option>Fashion</option>
@@ -34,17 +82,15 @@
 <option>Kitchen</option>
 </select>
 
-<br><br>
+<button class="add-btn" onclick="addProduct()">Add Product</button>
 
-<button onclick="addProduct()">Add Product</button>
-
-<!-- PRODUCT LIST -->
+<!-- 📦 PRODUCTS -->
 <h3>📦 Products</h3>
 <div id="productList"></div>
 
 <hr>
 
-<!-- ORDERS -->
+<!-- 📦 ORDERS -->
 <h3>📦 Orders</h3>
 <div id="orderList"></div>
 
@@ -52,17 +98,29 @@
 
 <script>
 
-/* LOGIN */
-function login(){
-let pass = document.getElementById("adminPass").value.trim();
-
-if(pass == "1234"){
+/* 🔐 AUTO LOGIN */
+if(localStorage.getItem("adminLogin") === "true"){
 document.getElementById("loginBox").style.display = "none";
 document.getElementById("adminPanel").style.display = "block";
 showProducts();
 renderOrders();
+}
+
+/* 🔐 LOGIN */
+function login(){
+let pass = document.getElementById("adminPass").value.trim();
+
+if(pass === "admin@2026"){
+localStorage.setItem("adminLogin","true");
+
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("adminPanel").style.display = "block";
+
+showProducts();
+renderOrders();
+
 }else{
-alert("Wrong Password");
+alert("Wrong Password ❌");
 }
 }
 
@@ -82,13 +140,13 @@ list.innerHTML += `
 <img src="${p.image}" style="width:60px; height:60px; border-radius:8px;">
 
 <div style="flex:1;">
-<p>${p.name}</p>
+<p><b>${p.name}</b></p>
 <p>₹${p.price}</p>
 <p style="font-size:12px; color:gray;">${p.category || "No category"}</p>
 </div>
 
-<button onclick="editProduct(${i})">✏️</button>
-<button onclick="deleteProduct(${i})">❌</button>
+<button class="edit-btn" onclick="editProduct(${i})">✏️</button>
+<button class="delete-btn" onclick="deleteProduct(${i})">❌</button>
 
 </div>
 `;
@@ -97,21 +155,29 @@ list.innerHTML += `
 
 }
 
+/* ADD PRODUCT */
 function addProduct(){
 
-let name = document.getElementById("name").value;
-let price = document.getElementById("price").value;
-let image = document.getElementById("image").value;
+let name = document.getElementById("name").value.trim();
+let price = document.getElementById("price").value.trim();
+let image = document.getElementById("image").value.trim();
 let category = document.getElementById("category").value;
 
 if(name=="" || price=="" || image==""){
-alert("Fill all fields");
+alert("Fill all fields ❌");
 return;
 }
 
-products.push({name,price,image,category});
+products.push({
+name,
+price: Number(price),
+image,
+category
+});
 
 localStorage.setItem("products",JSON.stringify(products));
+
+alert("Product Added ✅");
 
 showProducts();
 
@@ -122,7 +188,7 @@ document.getElementById("image").value = "";
 
 }
 
-/* EDIT */
+/* EDIT PRODUCT */
 function editProduct(i){
 
 let newName = prompt("Edit name", products[i].name);
@@ -130,7 +196,7 @@ let newPrice = prompt("Edit price", products[i].price);
 
 if(newName && newPrice){
 products[i].name = newName;
-products[i].price = newPrice;
+products[i].price = Number(newPrice);
 
 localStorage.setItem("products", JSON.stringify(products));
 showProducts();
@@ -138,7 +204,7 @@ showProducts();
 
 }
 
-/* DELETE */
+/* DELETE PRODUCT */
 function deleteProduct(i){
 
 if(confirm("Delete product?")){
@@ -149,16 +215,26 @@ showProducts();
 
 }
 
-/* ORDERS */
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
+/* 🔥 ALL USER ORDERS LOAD */
+let allOrders = [];
 
+for(let key in localStorage){
+if(key.startsWith("orders_")){
+let data = JSON.parse(localStorage.getItem(key)) || [];
+allOrders = allOrders.concat(data);
+}
+}
+
+let orders = allOrders;
+
+/* SHOW ORDERS */
 function renderOrders(){
 
 let container = document.getElementById("orderList");
 container.innerHTML = "";
 
 if(orders.length == 0){
-container.innerHTML = "<p>No orders</p>";
+container.innerHTML = "<p>No orders 😢</p>";
 return;
 }
 
@@ -172,7 +248,7 @@ itemsHTML += `<p>${item.name} (x${item.quantity})</p>`;
 total += item.price * item.quantity;
 });
 
-/* status color */
+/* STATUS COLOR */
 let color = "orange";
 if(o.status == "Shipped") color = "blue";
 if(o.status == "Delivered") color = "green";
@@ -201,7 +277,7 @@ ${itemsHTML}
 
 <br><br>
 
-<button onclick="deleteOrder(${index})">Delete</button>
+<button class="delete-btn" onclick="deleteOrder(${index})">Delete</button>
 
 </div>
 `;
@@ -212,13 +288,9 @@ ${itemsHTML}
 
 /* CHANGE STATUS */
 function changeStatus(index, status){
-
 orders[index].status = status;
-
-localStorage.setItem("orders", JSON.stringify(orders));
-
+saveOrders();
 renderOrders();
-
 }
 
 /* DELETE ORDER */
@@ -226,8 +298,25 @@ function deleteOrder(index){
 
 if(confirm("Delete order?")){
 orders.splice(index,1);
-localStorage.setItem("orders", JSON.stringify(orders));
+saveOrders();
 renderOrders();
+}
+
+}
+
+/* SAVE BACK TO STORAGE */
+function saveOrders(){
+
+let grouped = {};
+
+orders.forEach(o=>{
+let key = "orders_" + (o.name || "user");
+if(!grouped[key]) grouped[key] = [];
+grouped[key].push(o);
+});
+
+for(let k in grouped){
+localStorage.setItem(k, JSON.stringify(grouped[k]));
 }
 
 }
