@@ -102,7 +102,7 @@ color:white;
 if(localStorage.getItem("adminLogin") === "true"){
 document.getElementById("loginBox").style.display = "none";
 document.getElementById("adminPanel").style.display = "block";
-showProducts();
+loadProducts();
 renderOrders();
 }
 
@@ -116,7 +116,7 @@ localStorage.setItem("adminLogin","true");
 document.getElementById("loginBox").style.display = "none";
 document.getElementById("adminPanel").style.display = "block";
 
-showProducts();
+loadProducts();
 renderOrders();
 
 }else{
@@ -124,13 +124,25 @@ alert("Wrong Password ❌");
 }
 }
 
-/* PRODUCTS */
-let products = JSON.parse(localStorage.getItem("products")) || [];
+/* 🔥 LOAD PRODUCTS (IMPORTANT FIX) */
+function loadProducts(){
+products = JSON.parse(localStorage.getItem("products")) || [];
+showProducts();
+}
 
+/* PRODUCTS */
+let products = [];
+
+/* SHOW PRODUCTS */
 function showProducts(){
 
 let list = document.getElementById("productList");
 list.innerHTML = "";
+
+if(products.length === 0){
+list.innerHTML = "<p>No products 😢</p>";
+return;
+}
 
 products.forEach((p,i)=>{
 
@@ -155,7 +167,7 @@ list.innerHTML += `
 
 }
 
-/* ADD PRODUCT */
+/* ➕ ADD PRODUCT (FIXED) */
 function addProduct(){
 
 let name = document.getElementById("name").value.trim();
@@ -163,33 +175,39 @@ let price = document.getElementById("price").value.trim();
 let image = document.getElementById("image").value.trim();
 let category = document.getElementById("category").value;
 
-if(name=="" || price=="" || image==""){
-alert("Fill all fields ❌");
+if(!name || !price || !image){
+alert("সব fill করো ⚠️");
 return;
 }
 
+/* 🔥 always fresh data load */
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
 products.push({
-name,
-price: Number(price),
-image,
-category
+name:name,
+price:Number(price),
+image:image,
+category:category
 });
 
-localStorage.setItem("products",JSON.stringify(products));
+localStorage.setItem("products", JSON.stringify(products));
 
 alert("Product Added ✅");
 
-showProducts();
+/* reload products */
+loadProducts();
 
-/* clear */
+/* clear input */
 document.getElementById("name").value = "";
 document.getElementById("price").value = "";
 document.getElementById("image").value = "";
 
 }
 
-/* EDIT PRODUCT */
+/* ✏️ EDIT */
 function editProduct(i){
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
 
 let newName = prompt("Edit name", products[i].name);
 let newPrice = prompt("Edit price", products[i].price);
@@ -199,36 +217,44 @@ products[i].name = newName;
 products[i].price = Number(newPrice);
 
 localStorage.setItem("products", JSON.stringify(products));
-showProducts();
+loadProducts();
 }
 
 }
 
-/* DELETE PRODUCT */
+/* ❌ DELETE */
 function deleteProduct(i){
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
 
 if(confirm("Delete product?")){
 products.splice(i,1);
-localStorage.setItem("products",JSON.stringify(products));
-showProducts();
+localStorage.setItem("products", JSON.stringify(products));
+loadProducts();
 }
 
 }
 
 /* 🔥 ALL USER ORDERS LOAD */
-let allOrders = [];
+function getAllOrders(){
+let all = [];
 
 for(let key in localStorage){
 if(key.startsWith("orders_")){
 let data = JSON.parse(localStorage.getItem(key)) || [];
-allOrders = allOrders.concat(data);
+all = all.concat(data);
 }
 }
 
-let orders = allOrders;
+return all;
+}
 
-/* SHOW ORDERS */
+let orders = getAllOrders();
+
+/* 📦 SHOW ORDERS */
 function renderOrders(){
+
+orders = getAllOrders();
 
 let container = document.getElementById("orderList");
 container.innerHTML = "";
@@ -248,7 +274,6 @@ itemsHTML += `<p>${item.name} (x${item.quantity})</p>`;
 total += item.price * item.quantity;
 });
 
-/* STATUS COLOR */
 let color = "orange";
 if(o.status == "Shipped") color = "blue";
 if(o.status == "Delivered") color = "green";
@@ -275,10 +300,6 @@ ${itemsHTML}
 <option ${o.status=="Delivered"?"selected":""}>Delivered</option>
 </select>
 
-<br><br>
-
-<button class="delete-btn" onclick="deleteOrder(${index})">Delete</button>
-
 </div>
 `;
 
@@ -286,27 +307,12 @@ ${itemsHTML}
 
 }
 
-/* CHANGE STATUS */
+/* 🔄 CHANGE STATUS */
 function changeStatus(index, status){
+
 orders[index].status = status;
-saveOrders();
-renderOrders();
-}
 
-/* DELETE ORDER */
-function deleteOrder(index){
-
-if(confirm("Delete order?")){
-orders.splice(index,1);
-saveOrders();
-renderOrders();
-}
-
-}
-
-/* SAVE BACK TO STORAGE */
-function saveOrders(){
-
+/* save back */
 let grouped = {};
 
 orders.forEach(o=>{
@@ -318,6 +324,8 @@ grouped[key].push(o);
 for(let k in grouped){
 localStorage.setItem(k, JSON.stringify(grouped[k]));
 }
+
+renderOrders();
 
 }
 
